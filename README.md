@@ -1,33 +1,34 @@
 # IE108
 
-Starter Node + React project scaffolded for local development.
+Static frontend for the football pitch booking and match-making project.
 
-## Commands
+## Structure
 
-- `npm install` — install dependencies
-- `npm run dev` — start dev server
-- `npm run build` — build production
-- `npm run preview` — preview production build
+- `static/index.html` - component shell
+- `static/components/` - HTML partials for each UI section
+- `static/assets/css/` - base and component CSS files
+- `static/assets/js/script.js` - component loader and interactions
 
-## Next steps
+## Run locally
 
-1. Ensure Node.js (>=16) and npm are installed.
-2. Add a GitHub remote and push (SSH):
+- `npm run start` - serve the `static/` folder locally
+- `npm run check` - syntax-check the JavaScript
+
+If you want a quick one-off server without npm scripts, you can also use:
 
 ```bash
-cd C:\Users\HUNG\Pictures\IE108
-git remote add origin git@github.com:YOUR_USERNAME/IE108.git
-git branch -M main
-git push -u origin main
+npx http-server static
 ```
 
-## Quick start for contributors
+## Notes for contributors
 
-- **Clone (SSH):** `git clone git@github.com:Coffee2205/IE108.git`
-- **Clone (HTTPS):** `git clone https://github.com/Coffee2205/IE108.git`
-- **Install:** `npm install`
-- **Run dev server:** `npm run dev`
-- **Create branch:** `git checkout -b feature/your-feature`
-- **Commit & push:** `git push -u origin your-branch`
+- The project is HTML, CSS and vanilla JavaScript only.
+- No React, Vue, Angular, backend, or database is used.
+- The UI is split into reusable partials to keep sections maintainable.
+- Use GitHub SSH for cloning and pushing:
 
-If you prefer a specific Node version, use the project `.nvmrc` or Node >= 18.
+```bash
+git clone git@github.com:Coffee2205/IE108.git
+```
+
+Node.js 18+ is recommended.

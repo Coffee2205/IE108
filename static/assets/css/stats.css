@@ -1,0 +1,5 @@
+.stats-section{padding-top:10px}
+.stat-card{padding:22px;min-height:128px;display:flex;flex-direction:column;justify-content:center;gap:8px}
+.stat-value{font-size:34px;font-weight:800;line-height:1;color:#071127}
+.stat-label{font-size:15px;color:var(--muted);font-weight:600}
+.stat-icon{width:42px;height:42px;border-radius:12px;background:var(--accent-100);display:grid;place-items:center;color:#166534;font-size:18px}

@@ -1,0 +1,11 @@
+.contact-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.contact-card{padding:22px;min-height:160px}
+.contact-card h3{margin:0 0 10px;font-size:20px;font-weight:800;color:#071127}
+.contact-card p{margin:8px 0;color:var(--muted);line-height:1.7}
+.social-list{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+.social-link{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);color:#0f172a;font-weight:700;transition:transform .18s ease,background .18s ease}
+.social-link:hover{background:#f8fafc;transform:translateY(-2px);text-decoration:none}
+
+@media (max-width: 900px){
+  .contact-grid{grid-template-columns:1fr}
+}

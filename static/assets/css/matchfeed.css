@@ -1,0 +1,16 @@
+.feed-compose{padding:18px}
+.feed-compose textarea{min-height:92px;resize:vertical}
+.feed-compose__actions{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.feed-list{display:grid;gap:16px}
+.feed-card{padding:18px}
+.feed-card__header{display:flex;gap:14px;align-items:flex-start}
+.feed-avatar{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,var(--accent),var(--accent-700));display:grid;place-items:center;color:#fff;font-weight:800;font-size:18px;flex:none}
+.feed-team{margin:0;font-size:18px;font-weight:800;color:#071127}
+.feed-meta{margin-top:5px;color:var(--muted);font-size:14px;line-height:1.5}
+.feed-content{margin:12px 0 0;color:#334155;line-height:1.7}
+.feed-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.feed-card:hover{box-shadow:0 16px 28px rgba(2,6,23,.08)}
+
+@media (max-width: 768px){
+  .feed-compose__actions{flex-direction:column;align-items:stretch}
+}

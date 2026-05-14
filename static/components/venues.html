@@ -1,0 +1,29 @@
+<section id="venues" class="section venues-section">
+  <div class="container">
+    <div class="venues-toolbar">
+      <div>
+        <h2 class="section-title">Danh sách sân nổi bật</h2>
+        <p class="section-subtitle">Chọn sân phù hợp với khu vực, loại sân và ngân sách của bạn</p>
+      </div>
+      <div class="venues-filter">
+        <select id="filter-area" class="select">
+          <option value="all">Tất cả khu vực</option>
+          <option value="Hanoi">Hà Nội</option>
+          <option value="HCM">Hồ Chí Minh</option>
+        </select>
+      </div>
+    </div>
+    <div class="venues-grid" id="venues-grid"></div>
+  </div>
+
+  <div id="detail-modal" class="detail-modal card" aria-hidden="true">
+    <div class="detail-modal__header">
+      <div>
+        <h2 class="section-title" id="detail-title">Chi tiết sân</h2>
+        <p class="section-subtitle" id="detail-subtitle"></p>
+      </div>
+      <button id="close-detail" class="btn btn-outline">Đóng</button>
+    </div>
+    <div id="detail-content"></div>
+  </div>
+</section>

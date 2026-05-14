@@ -1,0 +1,18 @@
+.history-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.history-panel{padding:18px}
+.history-tab{background:transparent;border:1px solid var(--line);color:#0f172a;border-radius:999px;padding:10px 14px;font-weight:700;cursor:pointer;transition:all .18s ease}
+.history-tab.is-active{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 10px 20px rgba(34,197,94,.18)}
+.history-list{display:grid;gap:12px}
+.history-card{padding:18px;display:flex;justify-content:space-between;align-items:center;gap:14px}
+.history-card__title{margin:0;font-size:18px;font-weight:800;color:#071127}
+.history-card__meta{margin-top:6px;color:var(--muted);font-size:14px}
+.history-card__price{font-weight:800;color:#071127;font-size:18px}
+.history-card__actions{display:flex;gap:10px;flex-wrap:wrap}
+.booking-badge{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border-radius:999px;font-weight:700;font-size:13px}
+.booking-badge.upcoming{background:#DCFCE7;color:#166534}
+.booking-badge.completed{background:#E0F2FE;color:#075985}
+.booking-badge.cancelled{background:#FEE2E2;color:#991B1B}
+
+@media (max-width: 768px){
+  .history-card{flex-direction:column;align-items:flex-start}
+}
