@@ -1,4 +1,209 @@
 <!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>IE108 — Hệ thống Đặt sân & Ghép trận</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <header class="navbar" role="banner">
+      <div class="nav-left">
+        <div class="brand">IE108</div>
+        <div class="small muted">Đặt sân & Ghép trận</div>
+      </div>
+      <nav class="nav-right" role="navigation">
+        <div class="nav-links" id="nav-links">
+          <a href="#hero" class="nav-link">Trang chủ</a>
+          <a href="#venues" class="nav-link">Tìm sân</a>
+          <a href="#matchfeed" class="nav-link">Ghép trận</a>
+          <a href="#history" class="nav-link">Lịch sử</a>
+          <a href="#contact" class="nav-link">Liên hệ</a>
+        </div>
+        <button class="nav-outline" id="btn-login">Đăng nhập</button>
+        <button class="nav-cta" id="btn-signup">Đăng ký</button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Mở menu"><i class="fa fa-bars"></i></button>
+      </nav>
+    </header>
+
+    <!-- MOBILE MENU -->
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <a href="#hero">Trang chủ</a>
+      <a href="#venues">Tìm sân</a>
+      <a href="#matchfeed">Ghép trận</a>
+      <a href="#history">Lịch sử</a>
+      <a href="#contact">Liên hệ</a>
+      <hr>
+      <a href="#" id="m-login">Đăng nhập</a>
+      <a href="#" id="m-signup">Đăng ký</a>
+    </div>
+
+    <main>
+      <!-- HERO -->
+      <section id="hero" class="hero">
+        <div class="container hero-inner">
+          <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+            <div style="flex:1;min-width:260px">
+              <h1 style="color:white;margin:0 0 12px">Đặt sân bóng dễ dàng và nhanh chóng</h1>
+              <p style="color:rgba(255,255,255,0.9);margin:0 0 18px">Kết nối đam mê bóng đá, tìm sân trống và ghép trận chỉ trong vài phút</p>
+              <div style="display:flex;gap:12px;flex-wrap:wrap">
+                <button class="btn">Đặt sân ngay</button>
+                <button class="btn secondary">Tìm đối thủ</button>
+              </div>
+            </div>
+            <div style="width:420px;min-width:260px">
+              <div class="card">
+                <h3 style="margin:0 0 8px">Quick booking</h3>
+                <form id="quick-booking" class="search-row">
+                  <select id="area" class="select">
+                    <option value="Hanoi">Hà Nội</option>
+                    <option value="HCM">Hồ Chí Minh</option>
+                    <option value="DaNang">Đà Nẵng</option>
+                  </select>
+                  <select id="pitch-type" class="select">
+                    <option value="5v5">Sân 5v5</option>
+                    <option value="7v7">Sân 7v7</option>
+                    <option value="11v11">Sân 11v11</option>
+                  </select>
+                  <input id="date" type="date" class="input" />
+                  <button type="submit" class="btn">Tìm kiếm</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STATS -->
+      <section id="stats" class="container" style="margin-top:18px">
+        <div class="card-grid">
+          <div class="card">
+            <h3>500+</h3>
+            <p class="muted">Sân bóng</p>
+          </div>
+          <div class="card">
+            <h3>20K+</h3>
+            <p class="muted">Người chơi</p>
+          </div>
+          <div class="card">
+            <h3>5K+</h3>
+            <p class="muted">Trận đấu</p>
+          </div>
+          <div class="card">
+            <h3>99%</h3>
+            <p class="muted">Hài lòng</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- VENUES -->
+      <section id="venues" class="container" style="margin-top:20px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h2>Danh sách sân nổi bật</h2>
+          <div>
+            <select id="filter-area" class="select">
+              <option value="all">Tất cả khu vực</option>
+              <option value="Hanoi">Hà Nội</option>
+              <option value="HCM">Hồ Chí Minh</option>
+            </select>
+          </div>
+        </div>
+        <div class="card-grid" id="venues-grid" style="margin-top:12px">
+          <!-- JS will populate cards -->
+        </div>
+      </section>
+
+      <!-- DETAIL MODAL (hidden) -->
+      <div id="detail-modal" class="card" style="display:none;position:fixed;inset:20px;max-width:1000px;margin:auto;z-index:80;overflow:auto">
+        <button id="close-detail" style="float:right" class="nav-outline">Đóng</button>
+        <div id="detail-content"></div>
+      </div>
+
+      <!-- MATCH FEED -->
+      <section id="matchfeed" class="container" style="margin-top:28px">
+        <h2>Ghép trận</h2>
+        <div class="card">
+          <div id="create-post">
+            <textarea id="post-text" placeholder="Tạo bài đăng: bạn cần tuyển mấy người?" style="width:100%;min-height:60px;padding:12px;border-radius:8px;border:1px solid #e6e9ef"></textarea>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+              <div class="muted small">Bạn đăng với vai trò PLAYER</div>
+              <button id="post-btn" class="btn">Đăng bài</button>
+            </div>
+          </div>
+        </div>
+        <div id="feed" style="margin-top:12px"></div>
+      </section>
+
+      <!-- HISTORY -->
+      <section id="history" class="container" style="margin-top:28px">
+        <h2>Lịch sử đặt sân</h2>
+        <div class="card">
+          <div style="display:flex;gap:12px;margin-bottom:12px">
+            <button class="btn" data-tab="upcoming">Upcoming</button>
+            <button class="nav-outline" data-tab="completed">Completed</button>
+            <button class="nav-outline" data-tab="cancelled">Cancelled</button>
+          </div>
+          <div id="history-list"></div>
+        </div>
+      </section>
+
+      <!-- CHAT UI -->
+      <section id="chat" class="container" style="margin-top:28px">
+        <h2>Chat</h2>
+        <div class="card" style="display:flex;gap:12px;padding:0;overflow:hidden">
+          <aside style="width:280px;border-right:1px solid #eef2f6;padding:16px">
+            <div class="small muted">Conversations</div>
+            <ul id="conversations" style="list-style:none;padding:0;margin:12px 0 0"></ul>
+          </aside>
+          <div style="flex:1;display:flex;flex-direction:column">
+            <div id="chat-window" style="flex:1;padding:16px;overflow:auto"></div>
+            <div style="padding:12px;border-top:1px solid #eef2f6;display:flex;gap:8px;align-items:center">
+              <input id="chat-input" class="input" placeholder="Gửi tin nhắn..." />
+              <button id="chat-send" class="btn">Gửi</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTACT & FOOTER -->
+      <section id="contact" class="container" style="margin-top:28px">
+        <div class="card-grid">
+          <div class="card">
+            <h3>Liên hệ</h3>
+            <p class="muted">Email: support@ie108.example</p>
+            <p class="muted">Hotline: 0123 456 789</p>
+          </div>
+          <div class="card">
+            <h3>Quick links</h3>
+            <p><a href="#venues">Tìm sân</a></p>
+            <p><a href="#matchfeed">Ghép trận</a></p>
+          </div>
+          <div class="card">
+            <h3>Follow</h3>
+            <p><i class="fab fa-facebook"></i> Facebook • <i class="fab fa-instagram"></i> Instagram</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+        <div>
+          <div class="brand">IE108</div>
+          <div class="small muted">Hệ thống đặt sân & ghép trận bóng đá cho PLAYER</div>
+        </div>
+        <div class="small muted">© <span id="year"></span> IE108. All rights reserved.</div>
+      </div>
+    </footer>
+
+    <div id="toast" style="position:fixed;right:18px;bottom:18px;z-index:120"></div>
+
+    <script src="assets/js/script.js"></script>
+  </body>
+</html>
+<!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
