@@ -48,7 +48,7 @@
   window.IE108.loadComponent = async function(targetSelector, url) {
     const target = qs(targetSelector)
     if (!target) {
-      console.error(`❌ loadComponent: Target not found: ${targetSelector}`)
+      // Silently skip if target doesn't exist (useful for pages without navbar/footer)
       return
     }
     try {
