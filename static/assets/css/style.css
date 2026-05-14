@@ -1,8 +1,10 @@
 :root{
-  --bg:#f5f7fb;
+  /* Theme: gray background, white cards, green accent */
+  --bg:#eef2f3; /* light gray background */
   --card:#ffffff;
-  --nav:#0b1220;
-  --accent:#2fb86f;
+  --nav:#07241a; /* dark navbar */
+  --accent:#16a34a; /* primary green */
+  --accent-600:#15803d;
   --muted:#6b7280;
 }
 *{box-sizing:border-box}
@@ -17,6 +19,7 @@ body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);c
 .search-row{display:flex;gap:12px}
 .input, .select{flex:1;padding:10px 12px;border:1px solid #e6e9ef;border-radius:8px}
 .btn{background:var(--accent);color:white;padding:10px 14px;border-radius:8px;border:0;cursor:pointer}
+.btn:hover{background:var(--accent-600)}
 .muted{color:var(--muted)}
 .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
 .venue{padding:16px;border-radius:8px;border:1px solid #eef2f6;background:linear-gradient(180deg,rgba(255,255,255,0.6),transparent)}
@@ -26,6 +29,12 @@ body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);c
 .small{font-size:14px}
 .flex{display:flex;gap:12px;align-items:center}
 .badge{background:var(--accent);color:white;padding:6px 10px;border-radius:999px;font-weight:600}
+
+/* Links */
+a{color:var(--accent)}
+
+/* Make cards stand out on gray background */
+.card{background:var(--card);padding:20px;border-radius:10px;box-shadow:0 6px 18px rgba(12,12,20,0.06)}
 
 /* Responsive */
 @media(max-width:640px){.search-row{flex-direction:column}.nav-links{display:none}}
