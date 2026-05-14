@@ -60,9 +60,26 @@
 
   async function loadComponent(targetSelector, url) {
     const target = qs(targetSelector)
-    if (!target) return
-    const response = await fetch(url)
-    target.innerHTML = await response.text()
+    if (!target) {
+      console.error(`❌ loadComponent: Target not found: ${targetSelector}`)
+      return
+    }
+    try {
+      console.log(`⏳ Loading component: ${url}`)
+      const response = await fetch(url)
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${url}`)
+      }
+      const html = await response.text()
+      target.innerHTML = html
+      console.log(`✅ Loaded: ${url}`)
+    } catch (err) {
+      console.error(`❌ Failed to load ${url}:`, err)
+      target.innerHTML = `<div style="color: #dc2626; padding: 20px; text-align: center;">
+        <p>❌ Failed to load component: ${url}</p>
+        <p style="font-size: 12px; color: #6b7280;">${err.message}</p>
+      </div>`
+    }
   }
 
   function renderVenues(list) {
@@ -396,14 +413,22 @@
   }
 
   async function init() {
-    await Promise.all(components.map(([target, url]) => loadComponent(target, url)))
-    qs('#year').textContent = new Date().getFullYear()
-
-    renderVenues(venues)
-    renderHistory()
-    renderFeed()
-    renderConversations()
-    bindEvents()
+    console.log('🚀 IE108 initializing...')
+    try {
+      await Promise.all(components.map(([target, url]) => loadComponent(target, url)))
+      console.log('✅ All components loaded')
+      
+      qs('#year').textContent = new Date().getFullYear()
+      renderVenues(venues)
+      renderHistory()
+      renderFeed()
+      renderConversations()
+      bindEvents()
+      
+      console.log('✅ IE108 fully initialized')
+    } catch (err) {
+      console.error('❌ Init failed:', err)
+    }
   }
 
   document.addEventListener('DOMContentLoaded', init)

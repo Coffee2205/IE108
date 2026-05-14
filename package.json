@@ -11,7 +11,8 @@
     "node": ">=18"
   },
   "scripts": {
-    "start": "npx http-server static",
+    "start": "npx http-server static --cors",
+    "dev": "cd static && npx http-server .",
     "check": "node --check static/assets/js/script.js"
   }
 }
