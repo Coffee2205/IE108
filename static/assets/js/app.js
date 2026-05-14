@@ -3,16 +3,27 @@ function insertShell(){
   const foot = document.getElementById('footer-container')
   if(nav){
     nav.innerHTML = `
-    <div class="navbar">
-      <div class="nav-left">
-        <div class="brand">IE108</div>
-        <div class="small muted">Sân bóng & Kèo</div>
-      </div>
-      <div class="nav-links">
+    <div>
+      <nav class="navbar">
+        <div class="nav-left">
+          <div class="brand">IE108</div>
+          <div class="small muted">Đặt sân • Tuyển kèo</div>
+        </div>
+        <div class="nav-right">
+          <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="search.html">Search</a>
+            <a href="matchfeed.html">Match Feed</a>
+            <a href="booking.html">Booking</a>
+          </div>
+          <button id="nav-toggle" class="nav-toggle" aria-label="Toggle menu">☰</button>
+        </div>
+      </nav>
+      <div id="mobile-menu" class="mobile-menu">
         <a href="index.html">Home</a>
         <a href="search.html">Search</a>
         <a href="matchfeed.html">Match Feed</a>
-        <a href="booking.html">My Booking</a>
+        <a href="booking.html">Booking</a>
         <a href="login.html">Login</a>
       </div>
     </div>`
@@ -27,6 +38,14 @@ function insertShell(){
 // Basic demo interactions
 document.addEventListener('DOMContentLoaded',()=>{
   insertShell()
+  // Mobile nav toggle
+  const navToggle = document.getElementById('nav-toggle')
+  const mobileMenu = document.getElementById('mobile-menu')
+  if(navToggle && mobileMenu){
+    navToggle.addEventListener('click',()=>{
+      mobileMenu.style.display = mobileMenu.style.display === 'block' ? 'none' : 'block'
+    })
+  }
   const searchForm = document.getElementById('search-form')
   if(searchForm){
     searchForm.addEventListener('submit',e=>{
