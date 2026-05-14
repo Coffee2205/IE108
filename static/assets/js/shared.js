@@ -90,10 +90,10 @@
     }
 
     // Setup login/signup buttons
-    qs('#btn-login')?.addEventListener('click', () => window.IE108.toast('Màn hình đăng nhập demo'))
-    qs('#btn-signup')?.addEventListener('click', () => window.IE108.toast('Màn hình đăng ký demo'))
-    qs('#m-login')?.addEventListener('click', () => window.IE108.toast('Màn hình đăng nhập demo'))
-    qs('#m-signup')?.addEventListener('click', () => window.IE108.toast('Màn hình đăng ký demo'))
+    qs('#btn-login')?.addEventListener('click', () => window.location.href = 'login.html')
+    qs('#btn-signup')?.addEventListener('click', () => window.location.href = 'signup.html')
+    qs('#m-login')?.addEventListener('click', () => window.location.href = 'login.html')
+    qs('#m-signup')?.addEventListener('click', () => window.location.href = 'signup.html')
 
     // Set footer year
     const yearEl = qs('#year')

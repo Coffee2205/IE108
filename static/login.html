@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Đăng nhập - IE108</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+    <style>
+      .auth-page {
+        display: flex;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #0F172A 0%, #1e293b 100%);
+      }
+      
+      .auth-visual {
+        display: none;
+        flex: 1;
+        background: linear-gradient(135deg, #22C55E 0%, #16a34a 100%);
+        padding: 60px 40px;
+        color: white;
+        @media (min-width: 768px) {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+        }
+      }
+      
+      .auth-visual__icon {
+        font-size: 80px;
+        margin-bottom: 30px;
+        opacity: 0.9;
+      }
+      
+      .auth-visual h2 {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 20px;
+      }
+      
+      .auth-visual p {
+        font-size: 16px;
+        opacity: 0.9;
+        line-height: 1.6;
+      }
+      
+      .auth-container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 40px 20px;
+      }
+      
+      .auth-box {
+        max-width: 420px;
+        margin: 0 auto;
+        width: 100%;
+      }
+      
+      .auth-header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+      
+      .auth-header h1 {
+        font-size: 28px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 10px;
+      }
+      
+      .auth-header p {
+        color: #9ca3af;
+        font-size: 14px;
+      }
+      
+      .auth-form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      
+      .form-group label {
+        color: #e5e7eb;
+        font-size: 14px;
+        font-weight: 500;
+      }
+      
+      .form-group input {
+        padding: 12px 16px;
+        background: #1f2937;
+        border: 1px solid #374151;
+        border-radius: 8px;
+        color: white;
+        font-size: 14px;
+        transition: all 0.3s;
+      }
+      
+      .form-group input:focus {
+        outline: none;
+        background: #111827;
+        border-color: #22C55E;
+        box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+      }
+      
+      .form-group input::placeholder {
+        color: #6b7280;
+      }
+      
+      .auth-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 20px;
+      }
+      
+      .btn-login {
+        padding: 12px 16px;
+        background: #22C55E;
+        color: #111827;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 14px;
+      }
+      
+      .btn-login:hover {
+        background: #16a34a;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(34, 197, 94, 0.3);
+      }
+      
+      .remember-forgot {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 13px;
+        margin-top: 16px;
+      }
+      
+      .remember-forgot a {
+        color: #22C55E;
+        text-decoration: none;
+      }
+      
+      .remember-forgot a:hover {
+        text-decoration: underline;
+      }
+      
+      .checkbox {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #d1d5db;
+      }
+      
+      .checkbox input {
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+      }
+      
+      .auth-divider {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 24px 0;
+        color: #6b7280;
+        font-size: 13px;
+      }
+      
+      .auth-divider::before,
+      .auth-divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: #374151;
+      }
+      
+      .social-login {
+        display: flex;
+        gap: 12px;
+      }
+      
+      .social-btn {
+        flex: 1;
+        padding: 10px;
+        background: #1f2937;
+        border: 1px solid #374151;
+        border-radius: 8px;
+        color: white;
+        cursor: pointer;
+        font-size: 13px;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      
+      .social-btn:hover {
+        background: #111827;
+        border-color: #22C55E;
+      }
+      
+      .auth-footer {
+        text-align: center;
+        margin-top: 24px;
+        font-size: 13px;
+        color: #d1d5db;
+      }
+      
+      .auth-footer a {
+        color: #22C55E;
+        text-decoration: none;
+      }
+      
+      .auth-footer a:hover {
+        text-decoration: underline;
+      }
+
+      .back-home {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        color: white;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        transition: all 0.3s;
+      }
+
+      .back-home:hover {
+        color: #22C55E;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="index.html" class="back-home">
+      <i class="fa-solid fa-arrow-left"></i> Quay lại
+    </a>
+
+    <div class="auth-page">
+      <div class="auth-visual">
+        <div class="auth-visual__icon"><i class="fa-solid fa-futbol"></i></div>
+        <h2>Chào mừng đến IE108</h2>
+        <p>Đặt sân bóng dễ dàng, tìm đội chơi nhanh chóng, kết nối cộng đồng bóng đá</p>
+      </div>
+
+      <div class="auth-container">
+        <div class="auth-box">
+          <div class="auth-header">
+            <h1>Đăng nhập</h1>
+            <p>Quay lại để tiếp tục trải nghiệm</p>
+          </div>
+
+          <form class="auth-form" id="login-form">
+            <div class="form-group">
+              <label for="email">Email hoặc số điện thoại</label>
+              <input type="text" id="email" name="email" placeholder="Nhập email hoặc số điện thoại" required />
+            </div>
+
+            <div class="form-group">
+              <label for="password">Mật khẩu</label>
+              <input type="password" id="password" name="password" placeholder="Nhập mật khẩu" required />
+            </div>
+
+            <div class="remember-forgot">
+              <label class="checkbox">
+                <input type="checkbox" name="remember" />
+                <span>Ghi nhớ tôi</span>
+              </label>
+              <a href="#">Quên mật khẩu?</a>
+            </div>
+
+            <div class="auth-actions">
+              <button type="submit" class="btn-login">Đăng nhập</button>
+            </div>
+          </form>
+
+          <div class="auth-divider">Hoặc</div>
+
+          <div class="social-login">
+            <button class="social-btn">
+              <i class="fa-brands fa-facebook"></i>
+              <span>Facebook</span>
+            </button>
+            <button class="social-btn">
+              <i class="fa-brands fa-google"></i>
+              <span>Google</span>
+            </button>
+          </div>
+
+          <div class="auth-footer">
+            Chưa có tài khoản? <a href="signup.html">Đăng ký ngay</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast-container"></div>
+    <script src="assets/js/shared.js"></script>
+    <script src="assets/js/login.js"></script>
+  </body>
+</html>
