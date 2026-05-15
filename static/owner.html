@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>IE108 — Quản lý sân (Owner)</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap");
+
+      :root {
+        --bg: #f2f4f6;
+        --card: #ffffff;
+        --nav: #0f172a;
+        --nav-2: #0b1220;
+        --accent: #22c55e;
+        --accent-700: #16a34a;
+        --accent-100: #dcfce7;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --muted: #6b7280;
+        --line: #e6e9ef;
+        --text: #08111f;
+        --shadow: 0 10px 30px rgba(2, 6, 23, 0.08);
+        --radius: 14px;
+        --sidebar: 240px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Be Vietnam Pro", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        display: flex;
+        min-height: 100vh;
+      }
+      a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+      img {
+        max-width: 100%;
+        display: block;
+      }
+
+      /* ── Sidebar ── */
+      .sidebar {
+        width: var(--sidebar);
+        flex: none;
+        background: linear-gradient(180deg, var(--nav) 0%, var(--nav-2) 100%);
+        min-height: 100vh;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.25s ease;
+      }
+      .sidebar-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 20px 18px 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      .brand-mark {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-700));
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-size: 18px;
+        flex: none;
+        box-shadow: 0 8px 20px rgba(34, 197, 94, 0.3);
+      }
+      .brand-text span {
+        display: block;
+        color: #fff;
+        font-weight: 800;
+        font-size: 15px;
+        line-height: 1.1;
+      }
+      .brand-text small {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 11px;
+        font-weight: 500;
+      }
+
+      .sidebar-nav {
+        flex: 1;
+        padding: 10px 10px;
+      }
+      .nav-section-label {
+        color: rgba(255, 255, 255, 0.35);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 14px 10px 6px;
+      }
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 11px 12px;
+        border-radius: 11px;
+        margin-bottom: 2px;
+        color: rgba(255, 255, 255, 0.75);
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        border: 0;
+        background: transparent;
+        width: 100%;
+        text-align: left;
+        transition: background 0.18s, color 0.18s;
+      }
+      .nav-item i {
+        width: 18px;
+        text-align: center;
+        font-size: 15px;
+      }
+      .nav-item:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+      }
+      .nav-item.active {
+        background: rgba(34, 197, 94, 0.18);
+        color: #4ade80;
+      }
+      .nav-item .badge-count {
+        margin-left: auto;
+        background: var(--accent);
+        color: #fff;
+        border-radius: 999px;
+        font-size: 11px;
+        padding: 2px 7px;
+        font-weight: 700;
+      }
+
+      .sidebar-footer {
+        padding: 14px;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      .sidebar-user {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 11px;
+        background: rgba(255, 255, 255, 0.06);
+      }
+      .user-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-weight: 800;
+        font-size: 14px;
+        flex: none;
+      }
+      .user-info span {
+        display: block;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.2;
+      }
+      .user-info small {
+        color: rgba(255, 255, 255, 0.45);
+        font-size: 11px;
+      }
+
+      /* ── Main ── */
+      .main {
+        flex: 1;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+      }
+      .topbar {
+        background: #fff;
+        border-bottom: 1px solid var(--line);
+        padding: 14px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+      }
+      .topbar-title {
+        font-size: 18px;
+        font-weight: 800;
+        color: #071127;
+      }
+      .topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .topbar-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 11px;
+        border: 1px solid var(--line);
+        background: #fff;
+        color: var(--muted);
+        cursor: pointer;
+        display: grid;
+        place-items: center;
+        font-size: 15px;
+        transition: all 0.18s;
+      }
+      .topbar-btn:hover {
+        background: var(--accent-100);
+        color: var(--accent-700);
+        border-color: var(--accent-100);
+      }
+
+      .content {
+        padding: 24px;
+        flex: 1;
+        overflow-y: auto;
+      }
+
+      /* ── Cards ── */
+      .card {
+        background: var(--card);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(2, 6, 23, 0.03);
+      }
+      .btn {
+        border: 0;
+        border-radius: 11px;
+        padding: 10px 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.18s;
+        font-size: 14px;
+      }
+      .btn:hover {
+        transform: translateY(-1px);
+      }
+      .btn-primary {
+        background: linear-gradient(90deg, var(--accent), var(--accent-700));
+        color: #fff;
+        box-shadow: 0 8px 20px rgba(34, 197, 94, 0.22);
+      }
+      .btn-outline {
+        background: transparent;
+        border: 1px solid var(--line);
+        color: #0f172a;
+      }
+      .btn-danger {
+        background: #fee2e2;
+        color: #991b1b;
+        border: 0;
+      }
+      .btn-soft {
+        background: var(--accent-100);
+        color: #14532d;
+      }
+      .btn-warning {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .input,
+      .select,
+      .textarea {
+        width: 100%;
+        border: 2px solid #dfe5ec;
+        background: #fff;
+        border-radius: 11px;
+        padding: 10px 13px;
+        outline: none;
+        transition: border-color 0.18s, box-shadow 0.18s;
+        font-size: 14px;
+      }
+      .input:focus,
+      .select:focus,
+      .textarea:focus {
+        border-color: rgba(34, 197, 94, 0.45);
+        box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.1);
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 5px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+        background: var(--accent-100);
+        color: #166534;
+      }
+      .badge.warning {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .badge.danger {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      .badge.info {
+        background: #e0f2fe;
+        color: #075985;
+      }
+      .badge.neutral {
+        background: #e5e7eb;
+        color: #374151;
+      }
+
+      /* ── Stats grid ── */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 22px;
+      }
+      .stat-card {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .stat-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 13px;
+        display: grid;
+        place-items: center;
+        font-size: 18px;
+        margin-bottom: 8px;
+      }
+      .stat-icon.green {
+        background: var(--accent-100);
+        color: var(--accent-700);
+      }
+      .stat-icon.blue {
+        background: #eff6ff;
+        color: #1d4ed8;
+      }
+      .stat-icon.orange {
+        background: #fef3c7;
+        color: #d97706;
+      }
+      .stat-icon.red {
+        background: #fee2e2;
+        color: #dc2626;
+      }
+      .stat-label {
+        font-size: 13px;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      .stat-value {
+        font-size: 28px;
+        font-weight: 800;
+        color: #071127;
+        line-height: 1;
+      }
+      .stat-sub {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .stat-up {
+        color: var(--accent-700);
+        font-weight: 700;
+      }
+
+      /* ── Section heading ── */
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+      .section-title {
+        font-size: 17px;
+        font-weight: 800;
+        color: #071127;
+      }
+
+      /* ── Tabs ── */
+      .tabs {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+      }
+      .tab {
+        background: transparent;
+        border: 1px solid var(--line);
+        color: #0f172a;
+        border-radius: 999px;
+        padding: 8px 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.18s;
+        font-size: 13px;
+      }
+      .tab.active {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
+        box-shadow: 0 6px 16px rgba(34, 197, 94, 0.2);
+      }
+
+      /* ── Fields table ── */
+      .table-wrap {
+        overflow-x: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+      thead th {
+        padding: 11px 14px;
+        background: #f8fafc;
+        font-weight: 700;
+        color: #374151;
+        text-align: left;
+        border-bottom: 2px solid var(--line);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      tbody td {
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--line);
+        color: #1e293b;
+        vertical-align: middle;
+      }
+      tbody tr:hover {
+        background: #f8fafc;
+      }
+      tbody tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .field-name {
+        font-weight: 700;
+        color: #071127;
+      }
+      .field-img {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        object-fit: cover;
+        background: linear-gradient(135deg, #1e293b, #0f172a);
+        flex: none;
+      }
+      .td-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      /* ── Schedule ── */
+      .schedule-grid {
+        display: grid;
+        gap: 10px;
+      }
+      .schedule-card {
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        border-radius: 13px;
+        border: 1px solid var(--line);
+        background: #fff;
+        transition: box-shadow 0.18s;
+      }
+      .schedule-card:hover {
+        box-shadow: var(--shadow);
+      }
+      .schedule-time {
+        min-width: 80px;
+        text-align: center;
+        padding: 10px 12px;
+        border-radius: 11px;
+        background: #f1f5f9;
+      }
+      .schedule-time strong {
+        display: block;
+        font-size: 16px;
+        font-weight: 800;
+        color: #071127;
+      }
+      .schedule-time span {
+        font-size: 11px;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      .schedule-info {
+        flex: 1;
+      }
+      .schedule-venue {
+        font-weight: 800;
+        color: #071127;
+        font-size: 15px;
+      }
+      .schedule-meta {
+        font-size: 13px;
+        color: var(--muted);
+        margin-top: 3px;
+      }
+      .schedule-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      /* ── Revenue chart placeholder ── */
+      .chart-bar-area {
+        padding: 20px;
+      }
+      .chart-title {
+        font-size: 15px;
+        font-weight: 800;
+        margin-bottom: 16px;
+      }
+      .chart-bars {
+        display: flex;
+        align-items: flex-end;
+        gap: 10px;
+        height: 160px;
+      }
+      .bar-wrap {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+      }
+      .bar {
+        width: 100%;
+        border-radius: 8px 8px 0 0;
+        background: linear-gradient(180deg, var(--accent), var(--accent-700));
+        transition: height 0.4s ease;
+        min-width: 28px;
+      }
+      .bar-label {
+        font-size: 11px;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      .bar-val {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--accent-700);
+      }
+
+      /* ── Form modal overlay ── */
+      .overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        z-index: 200;
+        display: none;
+        place-items: center;
+        padding: 20px;
+      }
+      .overlay.open {
+        display: grid;
+      }
+      .modal {
+        background: #fff;
+        border-radius: 20px;
+        width: min(560px, 100%);
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
+        overflow: hidden;
+      }
+      .modal-header {
+        padding: 18px 22px;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .modal-title {
+        font-size: 17px;
+        font-weight: 800;
+      }
+      .modal-close {
+        background: var(--bg);
+        border: 0;
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+        color: var(--muted);
+      }
+      .modal-body {
+        padding: 22px;
+        display: grid;
+        gap: 14px;
+      }
+      .modal-footer {
+        padding: 14px 22px;
+        border-top: 1px solid var(--line);
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+      }
+      .form-label {
+        font-size: 13px;
+        font-weight: 700;
+        color: #374151;
+        margin-bottom: 5px;
+        display: block;
+      }
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      /* ── Slot grid ── */
+      .slots-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 8px;
+        margin-top: 10px;
+      }
+      .slot {
+        border: 0;
+        border-radius: 10px;
+        padding: 10px 6px;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.18s;
+        text-align: center;
+      }
+      .slot.available {
+        background: #dcfce7;
+        color: #166534;
+      }
+      .slot.booked {
+        background: #fee2e2;
+        color: #991b1b;
+        cursor: default;
+      }
+      .slot.selected {
+        background: var(--accent);
+        color: #fff;
+        box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+      }
+
+      /* ── Empty state ── */
+      .empty {
+        text-align: center;
+        padding: 40px 20px;
+        color: var(--muted);
+      }
+      .empty i {
+        font-size: 40px;
+        margin-bottom: 12px;
+        display: block;
+        opacity: 0.3;
+      }
+
+      /* ── Responsive ── */
+      .hamburger {
+        display: none;
+        background: transparent;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 8px 12px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      @media (max-width: 1024px) {
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 768px) {
+        .sidebar {
+          position: fixed;
+          inset: 0 auto 0 0;
+          z-index: 300;
+          transform: translateX(-100%);
+        }
+        .sidebar.open {
+          transform: translateX(0);
+        }
+        .hamburger {
+          display: block;
+        }
+        .stats-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 480px) {
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+        .slots-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-mark"><i class="fa-solid fa-futbol"></i></div>
+        <div class="brand-text">
+          <span>IE108</span>
+          <small>Owner Portal</small>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Tổng quan</div>
+        <button class="nav-item active" data-tab="dashboard">
+          <i class="fa-solid fa-chart-pie"></i> Dashboard
+        </button>
+
+        <div class="nav-section-label">Quản lý sân</div>
+        <button class="nav-item" data-tab="fields">
+          <i class="fa-solid fa-map-marker-alt"></i> Danh sách sân
+        </button>
+        <button class="nav-item" data-tab="schedule">
+          <i class="fa-solid fa-calendar-days"></i> Lịch biểu đặt sân
+          <span class="badge-count">3</span>
+        </button>
+
+        <div class="nav-section-label">Doanh thu</div>
+        <button class="nav-item" data-tab="revenue">
+          <i class="fa-solid fa-chart-line"></i> Thống kê doanh thu
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="user-avatar">N</div>
+          <div class="user-info">
+            <span>Nguyễn Văn A</span>
+            <small>Chủ sân · Owner</small>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main">
+      <!-- Topbar -->
+      <div class="topbar">
+        <div style="display: flex; align-items: center; gap: 12px">
+          <button class="hamburger" id="hamburger">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div class="topbar-title" id="topbar-title">Dashboard</div>
+        </div>
+        <div class="topbar-right">
+          <button class="topbar-btn" title="Thông báo">
+            <i class="fa-solid fa-bell"></i>
+          </button>
+          <span
+            id="topbar-username"
+            style="font-size: 13px; font-weight: 700; color: #374151"
+          ></span>
+          <button
+            class="btn btn-primary"
+            id="btn-add-field"
+            style="padding: 9px 16px; font-size: 13px"
+          >
+            <i class="fa-solid fa-plus" style="margin-right: 6px"></i>Thêm sân
+            mới
+          </button>
+          <button
+            class="btn btn-outline"
+            id="btn-logout"
+            style="padding: 9px 16px; font-size: 13px"
+          >
+            <i
+              class="fa-solid fa-arrow-right-from-bracket"
+              style="margin-right: 6px"
+            ></i
+            >Đăng xuất
+          </button>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="content">
+        <!-- ═══ TAB: DASHBOARD ═══ -->
+        <div id="tab-dashboard">
+          <!-- Stats -->
+          <div class="stats-grid">
+            <div class="card stat-card">
+              <div class="stat-icon green">
+                <i class="fa-solid fa-futbol"></i>
+              </div>
+              <div class="stat-label">Tổng sân</div>
+              <div class="stat-value">4</div>
+              <div class="stat-sub">sân đang hoạt động</div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-icon blue">
+                <i class="fa-solid fa-calendar-check"></i>
+              </div>
+              <div class="stat-label">Lượt đặt hôm nay</div>
+              <div class="stat-value">12</div>
+              <div class="stat-sub stat-up">
+                <i class="fa-solid fa-arrow-up"></i> +3 so với hôm qua
+              </div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-icon orange">
+                <i class="fa-solid fa-money-bill-wave"></i>
+              </div>
+              <div class="stat-label">Doanh thu tháng này</div>
+              <div class="stat-value">18.4M</div>
+              <div class="stat-sub stat-up">
+                <i class="fa-solid fa-arrow-up"></i> +12% so với tháng trước
+              </div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-icon red">
+                <i class="fa-solid fa-percent"></i>
+              </div>
+              <div class="stat-label">Tỉ lệ lấp đầy</div>
+              <div class="stat-value">78%</div>
+              <div class="stat-sub">trung bình tuần này</div>
+            </div>
+          </div>
+
+          <!-- Revenue mini chart + upcoming -->
+          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 16px">
+            <div class="card chart-bar-area">
+              <div class="section-header">
+                <div class="chart-title">Doanh thu 7 ngày gần nhất</div>
+                <select
+                  class="select"
+                  style="width: auto; padding: 7px 12px; font-size: 13px"
+                >
+                  <option>7 ngày</option>
+                  <option>30 ngày</option>
+                </select>
+              </div>
+              <div class="chart-bars" id="revenue-chart"></div>
+              <div
+                id="chart-labels"
+                style="display: flex; gap: 10px; margin-top: 4px"
+              ></div>
+            </div>
+
+            <div class="card" style="padding: 18px">
+              <div class="section-header" style="margin-bottom: 12px">
+                <div class="chart-title" style="margin: 0">Lịch hôm nay</div>
+                <span class="badge">3 ca</span>
+              </div>
+              <div style="display: grid; gap: 10px" id="today-schedule"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ TAB: FIELDS ═══ -->
+        <div id="tab-fields" style="display: none">
+          <div class="section-header">
+            <div>
+              <div class="section-title">Danh sách sân</div>
+              <div
+                style="font-size: 13px; color: var(--muted); margin-top: 3px"
+              >
+                Quản lý thông tin và khung giờ các sân của bạn
+              </div>
+            </div>
+            <button class="btn btn-primary" id="btn-add-field-2">
+              <i class="fa-solid fa-plus" style="margin-right: 6px"></i>Thêm sân
+            </button>
+          </div>
+          <div class="card">
+            <div class="table-wrap">
+              <table id="fields-table">
+                <thead>
+                  <tr>
+                    <th>Sân</th>
+                    <th>Loại</th>
+                    <th>Giá / giờ</th>
+                    <th>Trạng thái</th>
+                    <th>Lượt đặt</th>
+                    <th>Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody id="fields-body"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Slot manager -->
+          <div style="margin-top: 20px">
+            <div class="section-header">
+              <div class="section-title">Quản lý khung giờ — SVĐ Hoàng Mai</div>
+            </div>
+            <div class="card" style="padding: 18px">
+              <div
+                style="
+                  display: flex;
+                  gap: 10px;
+                  align-items: center;
+                  margin-bottom: 14px;
+                  flex-wrap: wrap;
+                "
+              >
+                <select
+                  class="select"
+                  style="width: auto; padding: 8px 13px; font-size: 13px"
+                  id="slot-field-select"
+                >
+                  <option>SVĐ Hoàng Mai</option>
+                  <option>Sân Bình Thạnh</option>
+                  <option>Trung tâm A</option>
+                </select>
+                <input
+                  type="date"
+                  class="input"
+                  style="width: auto; padding: 8px 13px; font-size: 13px"
+                  id="slot-date"
+                />
+                <button
+                  class="btn btn-soft"
+                  style="padding: 8px 14px; font-size: 13px"
+                >
+                  <i class="fa-solid fa-plus" style="margin-right: 5px"></i>Thêm
+                  khung giờ
+                </button>
+              </div>
+              <div class="slots-grid" id="slots-grid"></div>
+              <div
+                style="
+                  display: flex;
+                  gap: 16px;
+                  margin-top: 14px;
+                  flex-wrap: wrap;
+                "
+              >
+                <span
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    font-size: 12px;
+                  "
+                  ><span
+                    style="
+                      width: 12px;
+                      height: 12px;
+                      border-radius: 4px;
+                      background: #dcfce7;
+                      display: inline-block;
+                    "
+                  ></span>
+                  Còn trống</span
+                >
+                <span
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    font-size: 12px;
+                  "
+                  ><span
+                    style="
+                      width: 12px;
+                      height: 12px;
+                      border-radius: 4px;
+                      background: #fee2e2;
+                      display: inline-block;
+                    "
+                  ></span>
+                  Đã đặt</span
+                >
+                <span
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    font-size: 12px;
+                  "
+                  ><span
+                    style="
+                      width: 12px;
+                      height: 12px;
+                      border-radius: 4px;
+                      background: #22c55e;
+                      display: inline-block;
+                    "
+                  ></span>
+                  Đã chọn</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ TAB: SCHEDULE ═══ -->
+        <div id="tab-schedule" style="display: none">
+          <div class="section-header">
+            <div>
+              <div class="section-title">Lịch biểu đặt sân</div>
+              <div
+                style="font-size: 13px; color: var(--muted); margin-top: 3px"
+              >
+                Xác nhận check-in, check-out cho từng lượt đặt
+              </div>
+            </div>
+            <input
+              type="date"
+              class="input"
+              style="width: auto; padding: 9px 13px; font-size: 13px"
+              id="schedule-date"
+            />
+          </div>
+          <div class="tabs" id="schedule-tabs">
+            <button class="tab active" data-filter="all">Tất cả</button>
+            <button class="tab" data-filter="upcoming">Sắp tới</button>
+            <button class="tab" data-filter="checkin">Đã check-in</button>
+            <button class="tab" data-filter="completed">Hoàn tất</button>
+            <button class="tab" data-filter="cancelled">Đã hủy</button>
+          </div>
+          <div class="schedule-grid" id="schedule-list"></div>
+        </div>
+
+        <!-- ═══ TAB: REVENUE ═══ -->
+        <div id="tab-revenue" style="display: none">
+          <div class="section-header">
+            <div class="section-title">Thống kê doanh thu</div>
+            <div style="display: flex; gap: 10px">
+              <select
+                class="select"
+                style="width: auto; padding: 9px 13px; font-size: 13px"
+                id="rev-filter"
+              >
+                <option value="week">7 ngày</option>
+                <option value="month">30 ngày</option>
+                <option value="year">Năm nay</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="stats-grid" style="margin-bottom: 20px">
+            <div class="card stat-card">
+              <div class="stat-label">Tổng doanh thu</div>
+              <div class="stat-value" style="font-size: 24px">18,400,000₫</div>
+              <div class="stat-sub stat-up">+12% so với kỳ trước</div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-label">Số lượt đặt</div>
+              <div class="stat-value" style="font-size: 24px">84</div>
+              <div class="stat-sub stat-up">+7 so với kỳ trước</div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-label">Trung bình / lượt</div>
+              <div class="stat-value" style="font-size: 24px">219K</div>
+              <div class="stat-sub">đồng / lượt đặt</div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-label">Tỉ lệ hủy</div>
+              <div class="stat-value" style="font-size: 24px">8%</div>
+              <div class="stat-sub" style="color: #dc2626">
+                -2% so với kỳ trước
+              </div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 16px">
+            <div class="card chart-bar-area">
+              <div class="section-header">
+                <div class="chart-title">Biểu đồ doanh thu</div>
+              </div>
+              <div class="chart-bars" id="full-revenue-chart"></div>
+              <div
+                id="full-chart-labels"
+                style="display: flex; gap: 10px; margin-top: 6px"
+              ></div>
+            </div>
+
+            <div class="card" style="padding: 18px">
+              <div class="chart-title">Doanh thu theo sân</div>
+              <div
+                style="display: grid; gap: 12px; margin-top: 14px"
+                id="field-revenue-list"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /content -->
+    </div>
+    <!-- /main -->
+
+    <!-- ADD FIELD MODAL -->
+    <div class="overlay" id="add-field-overlay">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title">Thêm sân mới</div>
+          <button class="modal-close" id="close-field-modal">✕</button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <label class="form-label">Tên sân *</label>
+            <input class="input" placeholder="VD: Sân Hoàng Mai 2" />
+          </div>
+          <div class="form-row">
+            <div>
+              <label class="form-label">Loại sân</label>
+              <select class="select">
+                <option>5 người (5v5)</option>
+                <option>7 người (7v7)</option>
+                <option>11 người (11v11)</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label">Khu vực</label>
+              <select class="select">
+                <option>Hà Nội</option>
+                <option>Hồ Chí Minh</option>
+                <option>Đà Nẵng</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="form-label">Địa chỉ</label>
+            <input class="input" placeholder="Số nhà, đường, quận/huyện" />
+          </div>
+          <div class="form-row">
+            <div>
+              <label class="form-label">Giá mặc định / giờ (₫)</label>
+              <input class="input" type="number" placeholder="200000" />
+            </div>
+            <div>
+              <label class="form-label">Tiện ích</label>
+              <input
+                class="input"
+                placeholder="Ánh sáng, bãi xe, tắm tráng..."
+              />
+            </div>
+          </div>
+          <div>
+            <label class="form-label">Hình ảnh (URL)</label>
+            <input class="input" placeholder="https://..." />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" id="cancel-field-modal">Hủy</button>
+          <button class="btn btn-primary" id="save-field-btn">Lưu sân</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        const qs = (s) => document.querySelector(s);
+        const qsa = (s) => Array.from(document.querySelectorAll(s));
+
+        // ── Toast ──
+        function toast(msg, type = "success") {
+          const t = document.createElement("div");
+          t.style.cssText = `position:fixed;right:18px;bottom:18px;z-index:9999;padding:13px 18px;border-radius:12px;background:#fff;box-shadow:0 10px 30px rgba(0,0,0,.12);border-left:4px solid ${
+            type === "success"
+              ? "#22C55E"
+              : type === "error"
+              ? "#EF4444"
+              : "#F59E0B"
+          };font-weight:600;font-size:14px;max-width:320px`;
+          t.textContent = msg;
+          document.body.appendChild(t);
+          setTimeout(() => t.remove(), 2800);
+        }
+
+        // ── Data ──
+        const fields = [
+          {
+            id: 1,
+            name: "SVĐ Hoàng Mai",
+            type: "5v5",
+            area: "Hà Nội",
+            price: 200000,
+            status: "available",
+            bookings: 42,
+            img: "https://images.unsplash.com/photo-1517927033932-b3d18e5d7a9b?w=80&q=60",
+          },
+          {
+            id: 2,
+            name: "Trung tâm A",
+            type: "7v7",
+            area: "Hà Nội",
+            price: 320000,
+            status: "hold",
+            bookings: 27,
+            img: "https://images.unsplash.com/photo-1521412644187-c49fa049e84d?w=80&q=60",
+          },
+          {
+            id: 3,
+            name: "Sân Bình Thạnh",
+            type: "5v5",
+            area: "TP.HCM",
+            price: 180000,
+            status: "available",
+            bookings: 55,
+            img: "https://images.unsplash.com/photo-1533743983669-94fa5e8a93f4?w=80&q=60",
+          },
+          {
+            id: 4,
+            name: "Sân Quận 9",
+            type: "11v11",
+            area: "TP.HCM",
+            price: 450000,
+            status: "busy",
+            bookings: 18,
+            img: "https://images.unsplash.com/photo-1508098682722-e99c643e7f0b?w=80&q=60",
+          },
+        ];
+
+        const bookings = [
+          {
+            id: 1,
+            venue: "SVĐ Hoàng Mai",
+            player: "Nguyễn Trọng Bình",
+            time: "06:00 - 07:00",
+            date: "2025-05-15",
+            price: 200000,
+            status: "upcoming",
+            phone: "0912 345 678",
+          },
+          {
+            id: 2,
+            venue: "Trung tâm A",
+            player: "Lê Thành Công",
+            time: "08:00 - 09:00",
+            date: "2025-05-15",
+            price: 320000,
+            status: "checkin",
+            phone: "0987 654 321",
+          },
+          {
+            id: 3,
+            venue: "Sân Bình Thạnh",
+            player: "Trần Minh Khoa",
+            time: "10:00 - 11:00",
+            date: "2025-05-15",
+            price: 180000,
+            status: "completed",
+            phone: "0901 234 567",
+          },
+          {
+            id: 4,
+            venue: "SVĐ Hoàng Mai",
+            player: "Phạm Hữu Đức",
+            time: "15:00 - 16:00",
+            date: "2025-05-15",
+            price: 200000,
+            status: "upcoming",
+            phone: "0977 111 222",
+          },
+          {
+            id: 5,
+            venue: "Sân Quận 9",
+            player: "Hoàng Văn Nam",
+            time: "17:00 - 18:00",
+            date: "2025-05-15",
+            price: 450000,
+            status: "cancelled",
+            phone: "0933 444 555",
+          },
+          {
+            id: 6,
+            venue: "Trung tâm A",
+            player: "Vũ Quốc Hùng",
+            time: "19:00 - 20:00",
+            date: "2025-05-15",
+            price: 320000,
+            status: "upcoming",
+            phone: "0945 678 901",
+          },
+        ];
+
+        const revenueData = [
+          { day: "T2", val: 2.4 },
+          { day: "T3", val: 3.1 },
+          { day: "T4", val: 2.8 },
+          { day: "T5", val: 4.2 },
+          { day: "T6", val: 3.9 },
+          { day: "T7", val: 5.8 },
+          { day: "CN", val: 4.5 },
+        ];
+
+        const fieldRevenue = [
+          { name: "Sân Bình Thạnh", pct: 38, val: "7.0M" },
+          { name: "SVĐ Hoàng Mai", pct: 32, val: "5.9M" },
+          { name: "Trung tâm A", pct: 20, val: "3.7M" },
+          { name: "Sân Quận 9", pct: 10, val: "1.8M" },
+        ];
+
+        const slots = [
+          { time: "06:00", status: "booked" },
+          { time: "07:00", status: "available" },
+          { time: "08:00", status: "booked" },
+          { time: "09:00", status: "available" },
+          { time: "10:00", status: "available" },
+          { time: "11:00", status: "booked" },
+          { time: "13:00", status: "available" },
+          { time: "14:00", status: "available" },
+          { time: "15:00", status: "booked" },
+          { time: "16:00", status: "available" },
+          { time: "17:00", status: "available" },
+          { time: "18:00", status: "booked" },
+          { time: "19:00", status: "booked" },
+          { time: "20:00", status: "available" },
+          { time: "21:00", status: "available" },
+        ];
+
+        // ── Tab switching ──
+        const tabTitles = {
+          dashboard: "Dashboard",
+          fields: "Danh sách sân",
+          schedule: "Lịch biểu đặt sân",
+          revenue: "Thống kê doanh thu",
+        };
+        let currentScheduleFilter = "all";
+
+        function switchTab(name) {
+          qsa('[id^="tab-"]').forEach((el) => (el.style.display = "none"));
+          qs(`#tab-${name}`).style.display = "block";
+          qsa(".nav-item").forEach((el) => el.classList.remove("active"));
+          qs(`.nav-item[data-tab="${name}"]`)?.classList.add("active");
+          qs("#topbar-title").textContent = tabTitles[name] || name;
+        }
+
+        qsa(".nav-item[data-tab]").forEach((btn) => {
+          btn.addEventListener("click", () => switchTab(btn.dataset.tab));
+        });
+
+        // ── Sidebar mobile ──
+        const sidebar = qs("#sidebar");
+        qs("#hamburger").addEventListener("click", () =>
+          sidebar.classList.toggle("open")
+        );
+        document.addEventListener("click", (e) => {
+          if (
+            window.innerWidth <= 768 &&
+            !sidebar.contains(e.target) &&
+            e.target !== qs("#hamburger")
+          ) {
+            sidebar.classList.remove("open");
+          }
+        });
+
+        // ── Render fields table ──
+        function renderFields() {
+          const statusMap = {
+            available: '<span class="badge">Hoạt động</span>',
+            busy: '<span class="badge danger">Đang bận</span>',
+            hold: '<span class="badge warning">Giữ chỗ</span>',
+          };
+          qs("#fields-body").innerHTML = fields
+            .map(
+              (f) => `
+      <tr>
+        <td><div style="display:flex;align-items:center;gap:12px">
+          <img src="${f.img}" class="field-img" alt="">
+          <div>
+            <div class="field-name">${f.name}</div>
+            <div style="font-size:12px;color:var(--muted)">${f.area}</div>
+          </div>
+        </div></td>
+        <td><span class="badge neutral">${f.type}</span></td>
+        <td style="font-weight:700">${f.price.toLocaleString("vi-VN")}₫</td>
+        <td>${statusMap[f.status]}</td>
+        <td style="font-weight:700">${f.bookings} lượt</td>
+        <td><div class="td-actions">
+          <button class="btn btn-soft" style="padding:7px 12px;font-size:12px" onclick="openEditField(${
+            f.id
+          })"><i class="fa-solid fa-pen"></i></button>
+          <button class="btn btn-danger" style="padding:7px 12px;font-size:12px" onclick="deleteField(${
+            f.id
+          })"><i class="fa-solid fa-trash"></i></button>
+        </div></td>
+      </tr>
+    `
+            )
+            .join("");
+        }
+
+        window.openEditField = (id) => {
+          openModal();
+          toast("Đang chỉnh sửa sân #" + id, "success");
+        };
+        window.deleteField = (id) => {
+          if (confirm("Bạn có chắc muốn xóa sân này?")) {
+            toast("Đã xóa sân thành công");
+          }
+        };
+
+        // ── Render slots ──
+        function renderSlots() {
+          qs("#slots-grid").innerHTML = slots
+            .map(
+              (s, i) => `
+      <button class="slot ${s.status}" onclick="toggleSlot(${i})" ${
+                s.status === "booked" ? "disabled" : ""
+              }>
+        <div>${s.time}</div>
+        <div style="font-size:10px;margin-top:2px">${
+          s.status === "booked" ? "Đã đặt" : "Trống"
+        }</div>
+      </button>
+    `
+            )
+            .join("");
+        }
+
+        window.toggleSlot = (i) => {
+          if (slots[i].status === "available") slots[i].status = "selected";
+          else if (slots[i].status === "selected")
+            slots[i].status = "available";
+          renderSlots();
+        };
+
+        // ── Render schedule ──
+        function statusTag(s) {
+          const map = {
+            upcoming: '<span class="badge warning">Sắp tới</span>',
+            checkin: '<span class="badge info">Đã check-in</span>',
+            completed: '<span class="badge">Hoàn tất</span>',
+            cancelled: '<span class="badge danger">Đã hủy</span>',
+          };
+          return map[s] || "";
+        }
+
+        function renderSchedule() {
+          const filtered =
+            currentScheduleFilter === "all"
+              ? bookings
+              : bookings.filter((b) => b.status === currentScheduleFilter);
+          qs("#schedule-list").innerHTML = filtered.length
+            ? filtered
+                .map(
+                  (b) => `
+      <div class="schedule-card">
+        <div class="schedule-time">
+          <strong>${b.time.split(" - ")[0]}</strong>
+          <span>${b.time.split(" - ")[1]}</span>
+        </div>
+        <div class="schedule-info">
+          <div class="schedule-venue">${b.venue}</div>
+          <div class="schedule-meta">
+            <i class="fa-solid fa-user" style="margin-right:5px"></i>${b.player}
+            &nbsp;·&nbsp;<i class="fa-solid fa-phone" style="margin-right:5px"></i>${
+              b.phone
+            }
+            &nbsp;·&nbsp;<strong>${b.price.toLocaleString("vi-VN")}₫</strong>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          ${statusTag(b.status)}
+          ${
+            b.status === "upcoming"
+              ? `<button class="btn btn-soft" style="padding:7px 12px;font-size:12px" onclick="doCheckin(${b.id})"><i class="fa-solid fa-check" style="margin-right:4px"></i>Check-in</button>`
+              : ""
+          }
+          ${
+            b.status === "checkin"
+              ? `<button class="btn btn-primary" style="padding:7px 12px;font-size:12px" onclick="doCheckout(${b.id})"><i class="fa-solid fa-flag-checkered" style="margin-right:4px"></i>Check-out</button>`
+              : ""
+          }
+        </div>
+      </div>
+    `
+                )
+                .join("")
+            : '<div class="empty"><i class="fa-solid fa-calendar-xmark"></i><div>Không có lượt đặt nào</div></div>';
+        }
+
+        window.doCheckin = (id) => {
+          const b = bookings.find((x) => x.id === id);
+          if (b) {
+            b.status = "checkin";
+            renderSchedule();
+            toast("Check-in thành công!");
+          }
+        };
+        window.doCheckout = (id) => {
+          const b = bookings.find((x) => x.id === id);
+          if (b) {
+            b.status = "completed";
+            renderSchedule();
+            toast("Check-out thành công!");
+          }
+        };
+
+        qsa("#schedule-tabs .tab").forEach((tab) => {
+          tab.addEventListener("click", () => {
+            qsa("#schedule-tabs .tab").forEach((t) =>
+              t.classList.remove("active")
+            );
+            tab.classList.add("active");
+            currentScheduleFilter = tab.dataset.filter;
+            renderSchedule();
+          });
+        });
+
+        // ── Today schedule (dashboard) ──
+        function renderTodaySchedule() {
+          const upcoming = bookings
+            .filter((b) => b.status === "upcoming" || b.status === "checkin")
+            .slice(0, 3);
+          qs("#today-schedule").innerHTML = upcoming
+            .map(
+              (b) => `
+      <div style="display:flex;align-items:center;gap:10px;padding:10px;background:#f8fafc;border-radius:10px">
+        <div style="min-width:60px;font-size:13px;font-weight:800;color:#071127">${
+          b.time.split(" - ")[0]
+        }</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:700">${b.player}</div>
+          <div style="font-size:12px;color:var(--muted)">${b.venue}</div>
+        </div>
+        ${statusTag(b.status)}
+      </div>
+    `
+            )
+            .join("");
+        }
+
+        // ── Revenue charts ──
+        function renderChart(containerId, labelId, data) {
+          const maxVal = Math.max(...data.map((d) => d.val));
+          const container = qs(containerId);
+          const labels = qs(labelId);
+          if (!container) return;
+          container.innerHTML = data
+            .map(
+              (d) => `
+      <div class="bar-wrap">
+        <div class="bar-val">${d.val}M</div>
+        <div class="bar" style="height:${Math.round(
+          (d.val / maxVal) * 130
+        )}px"></div>
+      </div>
+    `
+            )
+            .join("");
+          labels.innerHTML = data
+            .map(
+              (d) =>
+                `<div style="flex:1;text-align:center;font-size:11px;color:var(--muted);font-weight:600">${d.day}</div>`
+            )
+            .join("");
+        }
+
+        function renderFieldRevenue() {
+          qs("#field-revenue-list").innerHTML = fieldRevenue
+            .map(
+              (f) => `
+      <div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px">
+          <span style="font-weight:600">${f.name}</span>
+          <span style="font-weight:800;color:var(--accent-700)">${f.val}₫</span>
+        </div>
+        <div style="background:#e5e7eb;border-radius:999px;height:6px">
+          <div style="background:linear-gradient(90deg,var(--accent),var(--accent-700));height:6px;border-radius:999px;width:${f.pct}%;transition:width .5s ease"></div>
+        </div>
+      </div>
+    `
+            )
+            .join("");
+        }
+
+        // ── Modal ──
+        function openModal() {
+          qs("#add-field-overlay").classList.add("open");
+        }
+        function closeModal() {
+          qs("#add-field-overlay").classList.remove("open");
+        }
+
+        qs("#btn-add-field").addEventListener("click", openModal);
+        qs("#btn-add-field-2")?.addEventListener("click", openModal);
+        qs("#close-field-modal").addEventListener("click", closeModal);
+        qs("#cancel-field-modal").addEventListener("click", closeModal);
+        qs("#add-field-overlay").addEventListener("click", (e) => {
+          if (e.target === qs("#add-field-overlay")) closeModal();
+        });
+
+        qs("#save-field-btn").addEventListener("click", () => {
+          toast("Sân mới đã được thêm thành công!", "success");
+          closeModal();
+        });
+
+        // ── Set date default ──
+        const today = new Date().toISOString().split("T")[0];
+        const slotDate = qs("#slot-date");
+        const scheduleDate = qs("#schedule-date");
+        if (slotDate) slotDate.value = today;
+        if (scheduleDate) scheduleDate.value = today;
+
+        // ── Init ──
+        renderFields();
+        renderSlots();
+        renderSchedule();
+        renderTodaySchedule();
+        renderChart("#revenue-chart", "#chart-labels", revenueData);
+        renderChart("#full-revenue-chart", "#full-chart-labels", revenueData);
+        renderFieldRevenue();
+      })();
+    </script>
+
+    <script>
+      // ── Auth guard ──
+      (function () {
+        const user = JSON.parse(localStorage.getItem("ie108_user") || "null");
+        if (!user || !user.loggedIn || user.role !== "owner") {
+          window.location.replace("login.html");
+          return;
+        }
+        // Show username in topbar + sidebar
+        document.addEventListener("DOMContentLoaded", function () {
+          const el = document.getElementById("topbar-username");
+          if (el) el.textContent = user.name;
+          const nameEl = document.querySelector(".user-info span");
+          if (nameEl) nameEl.textContent = user.name;
+
+          document
+            .getElementById("btn-logout")
+            ?.addEventListener("click", function () {
+              if (confirm("Bạn có chắc muốn đăng xuất?")) {
+                localStorage.removeItem("ie108_user");
+                window.location.href = "login.html";
+              }
+            });
+        });
+      })();
+    </script>
+  </body>
+</html>

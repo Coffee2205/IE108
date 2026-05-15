@@ -1,21 +1,1361 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="vi">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>IE108 — Hệ thống Đặt sân & Ghép trận</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="assets/css/style.css" rel="stylesheet">
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap");
+      :root {
+        --bg: #f0f4f8;
+        --card: #fff;
+        --nav: #0c1a2e;
+        --nav-2: #07101d;
+        --accent: #22c55e;
+        --accent-700: #16a34a;
+        --accent-100: #dcfce7;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --muted: #6b7280;
+        --line: #e5e9ef;
+        --text: #08111f;
+        --shadow: 0 10px 40px rgba(2, 6, 23, 0.08);
+        --radius: 16px;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "Be Vietnam Pro", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+      }
+      a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      img {
+        max-width: 100%;
+        display: block;
+      }
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+
+      /* ── NAVBAR ── */
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: linear-gradient(90deg, var(--nav), var(--nav-2));
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
+      }
+      .navbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 14px 24px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        color: #fff;
+        font-weight: 800;
+        font-size: 18px;
+      }
+      .brand-mark {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-700));
+        display: grid;
+        place-items: center;
+        font-size: 16px;
+        color: #fff;
+        box-shadow: 0 6px 18px rgba(34, 197, 94, 0.3);
+      }
+      .brand-copy span {
+        display: block;
+        font-size: 11px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.5);
+        line-height: 1;
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+      }
+      .nav-link {
+        color: rgba(255, 255, 255, 0.85);
+        font-weight: 600;
+        padding: 9px 13px;
+        border-radius: 9px;
+        transition: all 0.18s;
+        font-size: 14px;
+      }
+      .nav-link:hover {
+        background: rgba(255, 255, 255, 0.09);
+        color: #fff;
+        text-decoration: none;
+      }
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .btn {
+        border: 0;
+        border-radius: 10px;
+        padding: 10px 18px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.18s;
+        font-size: 14px;
+      }
+      .btn-ghost {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+      }
+      .btn-ghost:hover {
+        background: rgba(255, 255, 255, 0.18);
+      }
+      .btn-primary {
+        background: linear-gradient(90deg, var(--accent), var(--accent-700));
+        color: #fff;
+        box-shadow: 0 6px 18px rgba(34, 197, 94, 0.28);
+      }
+      .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 24px rgba(34, 197, 94, 0.36);
+      }
+      .nav-toggle {
+        display: none;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: #fff;
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+        place-items: center;
+      }
+      .mobile-menu {
+        display: none;
+        padding: 10px 20px 16px;
+        background: rgba(7, 16, 29, 0.98);
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      .mobile-menu a {
+        display: block;
+        padding: 11px 6px;
+        color: #fff;
+        font-weight: 600;
+        font-size: 15px;
+        border-radius: 9px;
+      }
+      .mobile-menu a:hover {
+        background: rgba(255, 255, 255, 0.06);
+        text-decoration: none;
+      }
+      .mobile-menu .mob-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      @media (max-width: 1024px) {
+        .nav-links {
+          display: none;
+        }
+        .nav-toggle {
+          display: grid;
+        }
+        .nav-actions .btn {
+          display: none;
+        }
+      }
+
+      /* ── HERO ── */
+      .hero {
+        padding: 32px 0 0;
+        position: relative;
+      }
+      .hero-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+      .hero-panel {
+        border-radius: 24px;
+        overflow: hidden;
+        position: relative;
+        min-height: 520px;
+        background: #0c1a2e;
+        display: flex;
+        align-items: center;
+      }
+      .hero-bg {
+        position: absolute;
+        inset: 0;
+        background: url("https://images.unsplash.com/photo-1556817411-31ae72fa3ea0?auto=format&fit=crop&w=1600&q=65")
+          center/cover no-repeat;
+        opacity: 0.28;
+      }
+      .hero-gradient {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          110deg,
+          rgba(7, 16, 29, 0.92) 0%,
+          rgba(7, 16, 29, 0.72) 50%,
+          rgba(15, 53, 22, 0.4) 100%
+        );
+      }
+      .hero-body {
+        position: relative;
+        z-index: 2;
+        padding: 56px 56px;
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 40px;
+        align-items: center;
+        width: 100%;
+      }
+      .hero-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(34, 197, 94, 0.15);
+        border: 1px solid rgba(34, 197, 94, 0.3);
+        color: #4ade80;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 7px 14px;
+        border-radius: 999px;
+        margin-bottom: 20px;
+        letter-spacing: 0.4px;
+      }
+      .hero-title {
+        font-size: clamp(36px, 4.5vw, 60px);
+        font-weight: 800;
+        color: #fff;
+        line-height: 1.07;
+        letter-spacing: -0.02em;
+        margin-bottom: 18px;
+      }
+      .hero-title .hl {
+        color: #86efac;
+      }
+      .hero-desc {
+        color: rgba(255, 255, 255, 0.75);
+        font-size: 17px;
+        line-height: 1.7;
+        max-width: 500px;
+        margin-bottom: 30px;
+      }
+      .hero-btns {
+        display: flex;
+        gap: 13px;
+        flex-wrap: wrap;
+      }
+      .hero-btns .btn-primary {
+        padding: 14px 28px;
+        font-size: 15px;
+        font-weight: 800;
+      }
+      .hero-btns .btn-outline-w {
+        padding: 13px 24px;
+        font-size: 15px;
+        font-weight: 700;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border: 1.5px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.18s;
+      }
+      .hero-btns .btn-outline-w:hover {
+        background: rgba(255, 255, 255, 0.18);
+      }
+      .hero-stats {
+        display: flex;
+        gap: 28px;
+        margin-top: 32px;
+        flex-wrap: wrap;
+      }
+      .h-stat strong {
+        display: block;
+        font-size: 26px;
+        font-weight: 800;
+        color: #fff;
+      }
+      .h-stat span {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.5);
+        font-weight: 600;
+      }
+
+      /* Quick booking card */
+      .qb-card {
+        background: rgba(255, 255, 255, 0.97);
+        border-radius: 20px;
+        padding: 24px;
+        backdrop-filter: blur(8px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+      }
+      .qb-title {
+        font-size: 18px;
+        font-weight: 800;
+        color: #071127;
+        margin-bottom: 4px;
+      }
+      .qb-sub {
+        font-size: 13px;
+        color: var(--muted);
+        margin-bottom: 18px;
+      }
+      .qb-form {
+        display: grid;
+        gap: 12px;
+      }
+      .qb-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .qb-label {
+        font-size: 12px;
+        font-weight: 700;
+        color: #374151;
+        margin-bottom: 5px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .qb-label i {
+        color: var(--accent);
+        font-size: 12px;
+      }
+      .qb-select,
+      .qb-input {
+        width: 100%;
+        padding: 11px 13px;
+        background: #f8fafc;
+        border: 1.5px solid #e5e9ef;
+        border-radius: 10px;
+        font-size: 14px;
+        color: #1e293b;
+        outline: none;
+        transition: all 0.18s;
+      }
+      .qb-select:focus,
+      .qb-input:focus {
+        border-color: rgba(34, 197, 94, 0.5);
+        box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+        background: #fff;
+      }
+      .qb-btn {
+        width: 100%;
+        padding: 13px;
+        background: linear-gradient(90deg, var(--accent), var(--accent-700));
+        color: #fff;
+        border: 0;
+        border-radius: 11px;
+        font-weight: 800;
+        font-size: 15px;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 6px 20px rgba(34, 197, 94, 0.28);
+      }
+      .qb-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 28px rgba(34, 197, 94, 0.38);
+      }
+
+      @media (max-width: 1024px) {
+        .hero-body {
+          grid-template-columns: 1fr;
+          padding: 40px 32px;
+        }
+        .qb-card {
+          margin-top: 8px;
+        }
+      }
+      @media (max-width: 600px) {
+        .hero-body {
+          padding: 28px 20px;
+        }
+        .hero-panel {
+          min-height: auto;
+        }
+      }
+
+      /* ── STATS STRIP ── */
+      .stats-strip {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 28px 24px 0;
+      }
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+      }
+      .stat-card {
+        background: var(--card);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 22px 20px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        border: 1px solid rgba(0, 0, 0, 0.03);
+        transition: transform 0.18s, box-shadow 0.18s;
+      }
+      .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 20px 50px rgba(2, 6, 23, 0.1);
+      }
+      .stat-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        font-size: 20px;
+        flex: none;
+      }
+      .stat-icon.green {
+        background: var(--accent-100);
+        color: var(--accent-700);
+      }
+      .stat-icon.blue {
+        background: #eff6ff;
+        color: #1d4ed8;
+      }
+      .stat-icon.orange {
+        background: #fef3c7;
+        color: #d97706;
+      }
+      .stat-icon.purple {
+        background: #f5f3ff;
+        color: #7c3aed;
+      }
+      .stat-val {
+        font-size: 28px;
+        font-weight: 800;
+        color: #071127;
+        line-height: 1;
+      }
+      .stat-label {
+        font-size: 13px;
+        color: var(--muted);
+        font-weight: 600;
+        margin-top: 3px;
+      }
+      @media (max-width: 900px) {
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 480px) {
+        .stats-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      /* ── FEATURES ── */
+      .section {
+        padding: 56px 0;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+      .sec-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        background: var(--accent-100);
+        color: var(--accent-700);
+        font-size: 12px;
+        font-weight: 700;
+        padding: 7px 13px;
+        border-radius: 999px;
+        margin-bottom: 14px;
+        letter-spacing: 0.4px;
+      }
+      .sec-title {
+        font-size: clamp(26px, 3vw, 38px);
+        font-weight: 800;
+        color: #071127;
+        line-height: 1.15;
+        margin-bottom: 12px;
+      }
+      .sec-desc {
+        font-size: 15px;
+        color: var(--muted);
+        line-height: 1.7;
+        max-width: 520px;
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin-top: 40px;
+      }
+      .feat-card {
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 28px;
+        border: 1px solid var(--line);
+        transition: all 0.22s;
+        position: relative;
+        overflow: hidden;
+      }
+      .feat-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(34, 197, 94, 0.04),
+          transparent 70%
+        );
+        opacity: 0;
+        transition: opacity 0.22s;
+      }
+      .feat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 50px rgba(2, 6, 23, 0.1);
+        border-color: rgba(34, 197, 94, 0.2);
+      }
+      .feat-card:hover::before {
+        opacity: 1;
+      }
+      .feat-card__icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 15px;
+        display: grid;
+        place-items: center;
+        font-size: 22px;
+        margin-bottom: 18px;
+      }
+      .feat-card__icon.g {
+        background: var(--accent-100);
+        color: var(--accent-700);
+      }
+      .feat-card__icon.b {
+        background: #eff6ff;
+        color: #1d4ed8;
+      }
+      .feat-card__icon.o {
+        background: #fef3c7;
+        color: #d97706;
+      }
+      .feat-card__icon.p {
+        background: #f5f3ff;
+        color: #7c3aed;
+      }
+      .feat-card__icon.r {
+        background: #fee2e2;
+        color: #dc2626;
+      }
+      .feat-card__icon.c {
+        background: #ecfeff;
+        color: #0891b2;
+      }
+      .feat-card h3 {
+        font-size: 17px;
+        font-weight: 800;
+        color: #071127;
+        margin-bottom: 8px;
+      }
+      .feat-card p {
+        font-size: 14px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+      @media (max-width: 900px) {
+        .features-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 560px) {
+        .features-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* ── HOW IT WORKS ── */
+      .how-bg {
+        background: linear-gradient(135deg, #0c1a2e 0%, #0f3522 100%);
+        padding: 56px 0;
+      }
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0;
+        margin-top: 40px;
+        position: relative;
+      }
+      .steps::before {
+        content: "";
+        position: absolute;
+        top: 36px;
+        left: 12%;
+        right: 12%;
+        height: 2px;
+        background: linear-gradient(
+          90deg,
+          rgba(34, 197, 94, 0.15),
+          rgba(34, 197, 94, 0.5),
+          rgba(34, 197, 94, 0.15)
+        );
+        z-index: 0;
+      }
+      .step {
+        text-align: center;
+        padding: 0 16px;
+        position: relative;
+        z-index: 1;
+      }
+      .step-num {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: rgba(34, 197, 94, 0.12);
+        border: 2px solid rgba(34, 197, 94, 0.3);
+        display: grid;
+        place-items: center;
+        margin: 0 auto 18px;
+        font-size: 28px;
+        transition: all 0.22s;
+      }
+      .step:hover .step-num {
+        background: rgba(34, 197, 94, 0.22);
+        border-color: rgba(34, 197, 94, 0.6);
+        transform: scale(1.08);
+      }
+      .step-n {
+        font-size: 11px;
+        font-weight: 700;
+        color: #4ade80;
+        letter-spacing: 0.6px;
+        margin-bottom: 4px;
+      }
+      .step h3 {
+        font-size: 15px;
+        font-weight: 800;
+        color: #fff;
+        margin-bottom: 8px;
+      }
+      .step p {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.55);
+        line-height: 1.6;
+      }
+      @media (max-width: 800px) {
+        .steps {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 28px;
+        }
+        .steps::before {
+          display: none;
+        }
+      }
+      @media (max-width: 480px) {
+        .steps {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* ── CTA ── */
+      .cta-wrap {
+        background: linear-gradient(90deg, var(--accent), var(--accent-700));
+        border-radius: 24px;
+        padding: 48px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .cta-wrap::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: url("https://images.unsplash.com/photo-1508098682722-e99c643e7f0b?auto=format&fit=crop&w=1200&q=40")
+          center/cover;
+        opacity: 0.08;
+      }
+      .cta-wrap h2 {
+        font-size: clamp(26px, 3.5vw, 42px);
+        font-weight: 800;
+        color: #fff;
+        position: relative;
+        margin-bottom: 12px;
+      }
+      .cta-wrap p {
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 16px;
+        position: relative;
+        margin-bottom: 28px;
+      }
+      .cta-btns {
+        display: flex;
+        gap: 14px;
+        justify-content: center;
+        flex-wrap: wrap;
+        position: relative;
+      }
+      .cta-btn-white {
+        padding: 14px 32px;
+        background: #fff;
+        color: var(--accent-700);
+        border: 0;
+        border-radius: 12px;
+        font-weight: 800;
+        font-size: 15px;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      }
+      .cta-btn-white:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 32px rgba(0, 0, 0, 0.2);
+      }
+      .cta-btn-ghost {
+        padding: 13px 28px;
+        background: rgba(255, 255, 255, 0.15);
+        color: #fff;
+        border: 1.5px solid rgba(255, 255, 255, 0.3);
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 15px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .cta-btn-ghost:hover {
+        background: rgba(255, 255, 255, 0.25);
+      }
+
+      /* ── FOOTER ── */
+      .site-footer {
+        background: var(--nav-2);
+        color: #94a3b8;
+        padding: 40px 0 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .footer-inner {
+        display: flex;
+        justify-content: space-between;
+        gap: 24px;
+        flex-wrap: wrap;
+        margin-bottom: 32px;
+      }
+      .footer-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .footer-brand strong {
+        display: block;
+        color: #fff;
+        font-size: 17px;
+        font-weight: 800;
+      }
+      .footer-brand span {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .footer-cols {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      .footer-col h4 {
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 12px;
+      }
+      .footer-col a {
+        display: block;
+        color: #94a3b8;
+        font-size: 13px;
+        margin-bottom: 8px;
+        transition: color 0.18s;
+      }
+      .footer-col a:hover {
+        color: #4ade80;
+        text-decoration: none;
+      }
+      .footer-bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.07);
+        padding-top: 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        font-size: 13px;
+      }
+      @media (max-width: 800px) {
+        .footer-cols {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      @media (max-width: 480px) {
+        .footer-cols {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
   </head>
   <body>
-    <div id="navbar-root"></div>
-    <main>
-      <div id="hero-root"></div>
-      <div id="stats-root"></div>
-    </main>
-    <div id="footer-root"></div>
-    <div id="toast" class="toast-container"></div>
-    <script src="assets/js/shared.js"></script>
-    <script src="assets/js/home.js"></script>
+    <!-- NAVBAR -->
+    <header class="site-header">
+      <nav class="navbar">
+        <a class="brand" href="index.html">
+          <div class="brand-mark"><i class="fa-solid fa-futbol"></i></div>
+          <div>
+            <span>IE108</span
+            ><span
+              style="
+                font-size: 11px;
+                font-weight: 500;
+                color: rgba(255, 255, 255, 0.5);
+              "
+              >Đặt sân & Ghép trận</span
+            >
+          </div>
+        </a>
+        <div class="nav-links">
+          <a href="index.html" class="nav-link">Trang chủ</a>
+          <a href="venues.html" class="nav-link">Tìm sân</a>
+          <a href="matchfeed.html" class="nav-link">Ghép trận</a>
+          <a href="history.html" class="nav-link">Lịch sử</a>
+          <a href="contact.html" class="nav-link">Liên hệ</a>
+        </div>
+        <div class="nav-actions" id="nav-actions">
+          <button class="btn btn-ghost" id="btn-login">Đăng nhập</button>
+          <button class="btn btn-primary" id="btn-signup">Đăng ký</button>
+        </div>
+        <button class="nav-toggle" id="nav-toggle">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </nav>
+      <div class="mobile-menu" id="mobile-menu" hidden>
+        <a href="index.html">Trang chủ</a>
+        <a href="venues.html">Tìm sân</a>
+        <a href="matchfeed.html">Ghép trận</a>
+        <a href="history.html">Lịch sử</a>
+        <a href="contact.html">Liên hệ</a>
+        <div class="mob-actions" id="mob-actions">
+          <button class="btn btn-ghost" id="m-login">Đăng nhập</button>
+          <button class="btn btn-primary" id="m-signup">Đăng ký</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-inner">
+        <div class="hero-panel">
+          <div class="hero-bg"></div>
+          <div class="hero-gradient"></div>
+          <div class="hero-body">
+            <!-- Copy -->
+            <div>
+              <div class="hero-kicker">
+                <i class="fa-solid fa-shield-heart"></i> Nền tảng bóng đá phong
+                trào #1 Việt Nam
+              </div>
+              <h1 class="hero-title">
+                Đặt sân bóng<br /><span class="hl">siêu nhanh</span>,<br />ghép
+                kèo siêu dễ
+              </h1>
+              <p class="hero-desc">
+                Tìm sân trống, thanh toán đặt cọc và kết nối với đối thủ — tất
+                cả trong một ứng dụng duy nhất.
+              </p>
+              <div class="hero-btns">
+                <button
+                  class="btn btn-primary"
+                  onclick="window.location.href='venues.html'"
+                >
+                  <i
+                    class="fa-solid fa-magnifying-glass"
+                    style="margin-right: 8px"
+                  ></i
+                  >Tìm sân ngay
+                </button>
+                <button
+                  class="btn-outline-w"
+                  onclick="window.location.href='matchfeed.html'"
+                >
+                  <i class="fa-solid fa-users" style="margin-right: 8px"></i>Tìm
+                  đối thủ
+                </button>
+              </div>
+              <div class="hero-stats">
+                <div class="h-stat">
+                  <strong>500+</strong><span>Sân bóng</span>
+                </div>
+                <div class="h-stat">
+                  <strong>20K+</strong><span>Người chơi</span>
+                </div>
+                <div class="h-stat">
+                  <strong>5K+</strong><span>Trận đấu</span>
+                </div>
+              </div>
+            </div>
+            <!-- Quick booking -->
+            <div class="qb-card">
+              <div class="qb-title">🔍 Tìm sân nhanh</div>
+              <div class="qb-sub">Chọn khu vực, loại sân và ngày đá</div>
+              <form class="qb-form" id="qb-form">
+                <div>
+                  <div class="qb-label">
+                    <i class="fa-solid fa-map-marker-alt"></i> Khu vực
+                  </div>
+                  <select class="qb-select" id="qb-area">
+                    <option value="Hanoi">Hà Nội</option>
+                    <option value="HCM">Hồ Chí Minh</option>
+                    <option value="DaNang">Đà Nẵng</option>
+                  </select>
+                </div>
+                <div class="qb-row">
+                  <div>
+                    <div class="qb-label">
+                      <i class="fa-solid fa-futbol"></i> Loại sân
+                    </div>
+                    <select class="qb-select" id="qb-type">
+                      <option value="5v5">Sân 5 người</option>
+                      <option value="7v7">Sân 7 người</option>
+                      <option value="11v11">Sân 11 người</option>
+                    </select>
+                  </div>
+                  <div>
+                    <div class="qb-label">
+                      <i class="fa-solid fa-calendar"></i> Ngày
+                    </div>
+                    <input type="date" class="qb-input" id="qb-date" />
+                  </div>
+                </div>
+                <button type="submit" class="qb-btn">
+                  <i class="fa-solid fa-search" style="margin-right: 8px"></i
+                  >Tìm sân
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATS STRIP -->
+    <div class="stats-strip">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="fa-solid fa-futbol"></i></div>
+          <div>
+            <div class="stat-val">500+</div>
+            <div class="stat-label">Sân bóng đăng ký</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue"><i class="fa-solid fa-users"></i></div>
+          <div>
+            <div class="stat-val">20K+</div>
+            <div class="stat-label">Người chơi tích cực</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange"><i class="fa-solid fa-trophy"></i></div>
+          <div>
+            <div class="stat-val">5K+</div>
+            <div class="stat-label">Trận đấu đã ghép</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple"><i class="fa-solid fa-star"></i></div>
+          <div>
+            <div class="stat-val">4.9★</div>
+            <div class="stat-label">Đánh giá trung bình</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEATURES -->
+    <div class="section">
+      <div class="container">
+        <div style="text-align: center; max-width: 580px; margin: 0 auto 8px">
+          <div class="sec-label">
+            <i class="fa-solid fa-bolt"></i> Tính năng nổi bật
+          </div>
+          <h2 class="sec-title">Mọi thứ bạn cần để đá bóng</h2>
+          <p class="sec-desc">
+            Từ tìm sân đến ghép kèo và chat trực tiếp — IE108 lo hết, bạn chỉ
+            cần đá
+          </p>
+        </div>
+        <div class="features-grid">
+          <div class="feat-card">
+            <div class="feat-card__icon g">
+              <i class="fa-solid fa-map-marker-alt"></i>
+            </div>
+            <h3>Tìm sân theo vị trí</h3>
+            <p>
+              Lọc sân theo khu vực, loại sân, giá cả và tình trạng còn trống
+              trong thời gian thực.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-card__icon b">
+              <i class="fa-solid fa-calendar-check"></i>
+            </div>
+            <h3>Đặt sân trực tuyến</h3>
+            <p>
+              Chọn khung giờ, thanh toán đặt cọc và nhận xác nhận ngay lập tức —
+              không cần gọi điện.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-card__icon o">
+              <i class="fa-solid fa-handshake"></i>
+            </div>
+            <h3>Bảng tin ghép trận</h3>
+            <p>
+              Đăng tin tìm đối thủ hoặc tuyển thêm cầu thủ, đội khác có thể nhận
+              kèo ngay.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-card__icon p">
+              <i class="fa-solid fa-comments"></i>
+            </div>
+            <h3>Chat nội bộ</h3>
+            <p>
+              Khi kèo được chấp nhận, phòng chat tự động mở để hai đội thương
+              lượng và chốt lịch.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-card__icon r">
+              <i class="fa-solid fa-chart-line"></i>
+            </div>
+            <h3>Dashboard chủ sân</h3>
+            <p>
+              Chủ sân quản lý lịch biểu, check-in khách và xem thống kê doanh
+              thu trực quan.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-card__icon c">
+              <i class="fa-solid fa-bell"></i>
+            </div>
+            <h3>Thông báo thời gian thực</h3>
+            <p>
+              Nhận thông báo ngay khi có kèo mới, booking được xác nhận hoặc tin
+              nhắn từ đội bạn.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div class="how-bg">
+      <div class="container">
+        <div style="text-align: center">
+          <div class="sec-label">
+            <i class="fa-solid fa-shoe-prints"></i> Chỉ 4 bước đơn giản
+          </div>
+          <h2 class="sec-title" style="color: #fff">
+            Bắt đầu đá bóng<br /><span style="color: #86efac"
+              >chỉ trong vài phút</span
+            >
+          </h2>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">
+              <i
+                class="fa-solid fa-user-plus"
+                style="color: #4ade80; font-size: 24px"
+              ></i>
+            </div>
+            <div class="step-n">BƯỚC 1</div>
+            <h3>Tạo tài khoản</h3>
+            <p>Đăng ký miễn phí, chọn vai trò Player hoặc Owner</p>
+          </div>
+          <div class="step">
+            <div class="step-num">
+              <i
+                class="fa-solid fa-magnifying-glass"
+                style="color: #4ade80; font-size: 24px"
+              ></i>
+            </div>
+            <div class="step-n">BƯỚC 2</div>
+            <h3>Tìm sân phù hợp</h3>
+            <p>Lọc theo khu vực, loại sân và khung giờ trống</p>
+          </div>
+          <div class="step">
+            <div class="step-num">
+              <i
+                class="fa-solid fa-credit-card"
+                style="color: #4ade80; font-size: 24px"
+              ></i>
+            </div>
+            <div class="step-n">BƯỚC 3</div>
+            <h3>Đặt cọc & xác nhận</h3>
+            <p>Thanh toán đặt cọc online, nhận xác nhận tức thì</p>
+          </div>
+          <div class="step">
+            <div class="step-num">
+              <i
+                class="fa-solid fa-futbol"
+                style="color: #4ade80; font-size: 24px"
+              ></i>
+            </div>
+            <div class="step-n">BƯỚC 4</div>
+            <h3>Ra sân & đá thôi!</h3>
+            <p>Đến sân, check-in và tận hưởng trận đấu</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="section">
+      <div class="container">
+        <div class="cta-wrap">
+          <h2>Sẵn sàng ra sân chưa? ⚽</h2>
+          <p>
+            Hàng nghìn người chơi đang tìm kèo mỗi ngày — đừng để họ đá thiếu
+            bạn!
+          </p>
+          <div class="cta-btns">
+            <button
+              class="cta-btn-white"
+              onclick="window.location.href='signup.html'"
+            >
+              Đăng ký miễn phí
+            </button>
+            <button
+              class="cta-btn-ghost"
+              onclick="window.location.href='venues.html'"
+            >
+              Xem sân ngay
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-inner">
+          <div>
+            <div class="footer-brand" style="margin-bottom: 10px">
+              <div class="brand-mark"><i class="fa-solid fa-futbol"></i></div>
+              <div>
+                <strong>IE108</strong><span>Hệ thống Đặt sân & Ghép trận</span>
+              </div>
+            </div>
+            <p
+              style="
+                font-size: 13px;
+                color: #64748b;
+                max-width: 220px;
+                line-height: 1.6;
+              "
+            >
+              Nền tảng kết nối người chơi bóng đá và chủ sân trên toàn Việt Nam.
+            </p>
+          </div>
+          <div class="footer-cols">
+            <div class="footer-col">
+              <h4>Dịch vụ</h4>
+              <a href="venues.html">Tìm sân bóng</a>
+              <a href="matchfeed.html">Ghép trận</a>
+              <a href="history.html">Lịch sử đặt sân</a>
+            </div>
+            <div class="footer-col">
+              <h4>Hỗ trợ</h4>
+              <a href="contact.html">Liên hệ</a>
+              <a href="#">Câu hỏi thường gặp</a>
+              <a href="#">Chính sách hủy</a>
+            </div>
+            <div class="footer-col">
+              <h4>Theo dõi</h4>
+              <a href="#"
+                ><i class="fa-brands fa-facebook" style="margin-right: 7px"></i
+                >Facebook</a
+              >
+              <a href="#"
+                ><i class="fa-brands fa-instagram" style="margin-right: 7px"></i
+                >Instagram</a
+              >
+              <a href="#"
+                ><i class="fa-brands fa-tiktok" style="margin-right: 7px"></i
+                >TikTok</a
+              >
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>© <span id="year"></span> IE108. All rights reserved.</span>
+          <span>Made with ❤️ for football lovers</span>
+        </div>
+      </div>
+    </footer>
+
+    <div
+      id="toast"
+      style="
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        z-index: 999;
+        display: grid;
+        gap: 8px;
+      "
+    ></div>
+
+    <script>
+      // ── Auth state ──
+      const user = JSON.parse(localStorage.getItem("ie108_user") || "null");
+      const REDIRECT = {
+        player: "index.html",
+        owner: "owner.html",
+        admin: "admin.html",
+      };
+
+      function toast(msg, type = "success") {
+        const box = document.getElementById("toast");
+        const el = document.createElement("div");
+        el.style.cssText = `padding:12px 16px;border-radius:12px;background:#1e293b;border-left:4px solid ${
+          type === "success" ? "#22C55E" : "#EF4444"
+        };color:#f1f5f9;font-size:14px;font-weight:600;min-width:240px;box-shadow:0 10px 30px rgba(0,0,0,.3);font-family:'Be Vietnam Pro',sans-serif`;
+        el.textContent = msg;
+        box.appendChild(el);
+        setTimeout(() => el.remove(), 2800);
+      }
+
+      // ── Navbar auth ──
+      function setupNavbar() {
+        const actions = document.getElementById("nav-actions");
+        const mobActions = document.getElementById("mob-actions");
+        if (user && user.loggedIn) {
+          const roleColor = {
+            player: "#3b82f6",
+            owner: "#8b5cf6",
+            admin: "#ef4444",
+          };
+          const roleLabel = {
+            player: "Player",
+            owner: "Chủ sân",
+            admin: "Admin",
+          };
+          actions.innerHTML = `
+      <a href="${
+        REDIRECT[user.role] || "index.html"
+      }" style="display:flex;align-items:center;gap:8px;color:#fff;font-size:14px;font-weight:700;text-decoration:none;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,.09)">
+        <span style="width:28px;height:28px;border-radius:8px;background:${
+          roleColor[user.role]
+        };display:grid;place-items:center;font-size:12px;font-weight:800;flex:none">${
+            user.name[0]
+          }</span>
+        <span>${user.name}</span>
+      </a>
+      <button onclick="doLogout()" class="btn btn-ghost" style="font-size:13px;padding:9px 14px"><i class="fa-solid fa-arrow-right-from-bracket" style="margin-right:6px"></i>Đăng xuất</button>
+    `;
+          if (mobActions)
+            mobActions.innerHTML = `<div style="color:#fff;font-size:14px;font-weight:700;padding:8px 6px">Xin chào, ${user.name}!</div><button onclick="doLogout()" class="btn btn-ghost" style="font-size:13px">Đăng xuất</button>`;
+        } else {
+          document
+            .getElementById("btn-login")
+            ?.addEventListener(
+              "click",
+              () => (window.location.href = "login.html")
+            );
+          document
+            .getElementById("btn-signup")
+            ?.addEventListener(
+              "click",
+              () => (window.location.href = "signup.html")
+            );
+          document
+            .getElementById("m-login")
+            ?.addEventListener(
+              "click",
+              () => (window.location.href = "login.html")
+            );
+          document
+            .getElementById("m-signup")
+            ?.addEventListener(
+              "click",
+              () => (window.location.href = "signup.html")
+            );
+        }
+      }
+
+      function doLogout() {
+        if (confirm("Bạn có chắc muốn đăng xuất?")) {
+          localStorage.removeItem("ie108_user");
+          window.location.reload();
+        }
+      }
+
+      // ── Mobile nav ──
+      document.getElementById("nav-toggle").addEventListener("click", () => {
+        const mm = document.getElementById("mobile-menu");
+        mm.hasAttribute("hidden")
+          ? mm.removeAttribute("hidden")
+          : mm.setAttribute("hidden", "");
+      });
+
+      // ── Quick booking ──
+      document.getElementById("qb-date").value = new Date()
+        .toISOString()
+        .split("T")[0];
+      document.getElementById("qb-form").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const area = document.getElementById("qb-area").value;
+        const type = document.getElementById("qb-type").value;
+        localStorage.setItem("venueFilter", JSON.stringify({ area, type }));
+        window.location.href = "venues.html";
+      });
+
+      // ── Footer year ──
+      document.getElementById("year").textContent = new Date().getFullYear();
+
+      setupNavbar();
+    </script>
   </body>
 </html>

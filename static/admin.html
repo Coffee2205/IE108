@@ -1,0 +1,1926 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>IE108 — Quản trị hệ thống (Admin)</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap");
+
+      :root {
+        --bg: #f2f4f6;
+        --card: #ffffff;
+        --nav: #0f172a;
+        --nav-2: #0b1220;
+        --accent: #22c55e;
+        --accent-700: #16a34a;
+        --accent-100: #dcfce7;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --muted: #6b7280;
+        --line: #e6e9ef;
+        --text: #08111f;
+        --shadow: 0 10px 30px rgba(2, 6, 23, 0.08);
+        --radius: 14px;
+        --sidebar: 240px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Be Vietnam Pro", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        display: flex;
+        min-height: 100vh;
+      }
+      a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+      img {
+        max-width: 100%;
+        display: block;
+      }
+
+      /* ── Sidebar ── */
+      .sidebar {
+        width: var(--sidebar);
+        flex: none;
+        background: linear-gradient(180deg, #0c1a2e 0%, #07101d 100%);
+        min-height: 100vh;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.25s ease;
+      }
+      .sidebar-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 20px 18px 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      .brand-mark {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #ef4444, #b91c1c);
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-size: 16px;
+        flex: none;
+        box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+      }
+      .brand-text span {
+        display: block;
+        color: #fff;
+        font-weight: 800;
+        font-size: 15px;
+        line-height: 1.1;
+      }
+      .brand-text small {
+        color: rgba(255, 255, 255, 0.45);
+        font-size: 11px;
+        font-weight: 500;
+      }
+
+      .sidebar-nav {
+        flex: 1;
+        padding: 10px;
+      }
+      .nav-section-label {
+        color: rgba(255, 255, 255, 0.3);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 14px 10px 6px;
+      }
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 11px 12px;
+        border-radius: 11px;
+        margin-bottom: 2px;
+        color: rgba(255, 255, 255, 0.7);
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        border: 0;
+        background: transparent;
+        width: 100%;
+        text-align: left;
+        transition: background 0.18s, color 0.18s;
+      }
+      .nav-item i {
+        width: 18px;
+        text-align: center;
+        font-size: 14px;
+      }
+      .nav-item:hover {
+        background: rgba(255, 255, 255, 0.07);
+        color: #fff;
+      }
+      .nav-item.active {
+        background: rgba(239, 68, 68, 0.2);
+        color: #fca5a5;
+      }
+      .nav-item .badge-count {
+        margin-left: auto;
+        background: #ef4444;
+        color: #fff;
+        border-radius: 999px;
+        font-size: 11px;
+        padding: 2px 7px;
+        font-weight: 700;
+      }
+
+      .sidebar-footer {
+        padding: 14px;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .sidebar-user {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 11px;
+        background: rgba(255, 255, 255, 0.05);
+      }
+      .user-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #ef4444, #b91c1c);
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-weight: 800;
+        font-size: 14px;
+        flex: none;
+      }
+      .user-info span {
+        display: block;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.2;
+      }
+      .user-info small {
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 11px;
+      }
+
+      /* ── Main ── */
+      .main {
+        flex: 1;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+      }
+      .topbar {
+        background: #fff;
+        border-bottom: 1px solid var(--line);
+        padding: 14px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+      }
+      .topbar-title {
+        font-size: 18px;
+        font-weight: 800;
+        color: #071127;
+      }
+      .topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .topbar-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 11px;
+        border: 1px solid var(--line);
+        background: #fff;
+        color: var(--muted);
+        cursor: pointer;
+        display: grid;
+        place-items: center;
+        font-size: 15px;
+        transition: all 0.18s;
+      }
+      .topbar-btn:hover {
+        background: #fee2e2;
+        color: #dc2626;
+        border-color: #fee2e2;
+      }
+
+      .content {
+        padding: 24px;
+        flex: 1;
+        overflow-y: auto;
+      }
+
+      /* ── Cards ── */
+      .card {
+        background: var(--card);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(2, 6, 23, 0.03);
+      }
+      .btn {
+        border: 0;
+        border-radius: 11px;
+        padding: 9px 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.18s;
+        font-size: 13px;
+      }
+      .btn:hover {
+        transform: translateY(-1px);
+      }
+      .btn-primary {
+        background: linear-gradient(90deg, var(--accent), var(--accent-700));
+        color: #fff;
+        box-shadow: 0 6px 16px rgba(34, 197, 94, 0.22);
+      }
+      .btn-outline {
+        background: transparent;
+        border: 1px solid var(--line);
+        color: #0f172a;
+      }
+      .btn-danger {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      .btn-soft {
+        background: var(--accent-100);
+        color: #14532d;
+      }
+      .btn-warning {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .btn-red {
+        background: linear-gradient(90deg, #ef4444, #b91c1c);
+        color: #fff;
+        box-shadow: 0 6px 16px rgba(239, 68, 68, 0.22);
+      }
+      .input,
+      .select,
+      .textarea {
+        width: 100%;
+        border: 2px solid #dfe5ec;
+        background: #fff;
+        border-radius: 11px;
+        padding: 9px 13px;
+        outline: none;
+        transition: border-color 0.18s, box-shadow 0.18s;
+        font-size: 14px;
+      }
+      .input:focus,
+      .select:focus,
+      .textarea:focus {
+        border-color: rgba(34, 197, 94, 0.45);
+        box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.1);
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 5px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+        background: var(--accent-100);
+        color: #166534;
+      }
+      .badge.warning {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .badge.danger {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      .badge.info {
+        background: #e0f2fe;
+        color: #075985;
+      }
+      .badge.neutral {
+        background: #e5e7eb;
+        color: #374151;
+      }
+      .badge.red {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      /* ── Stats ── */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 22px;
+      }
+      .stat-card {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .stat-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 13px;
+        display: grid;
+        place-items: center;
+        font-size: 18px;
+        margin-bottom: 8px;
+      }
+      .stat-icon.green {
+        background: var(--accent-100);
+        color: var(--accent-700);
+      }
+      .stat-icon.blue {
+        background: #eff6ff;
+        color: #1d4ed8;
+      }
+      .stat-icon.orange {
+        background: #fef3c7;
+        color: #d97706;
+      }
+      .stat-icon.red {
+        background: #fee2e2;
+        color: #dc2626;
+      }
+      .stat-icon.purple {
+        background: #f5f3ff;
+        color: #7c3aed;
+      }
+      .stat-label {
+        font-size: 13px;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      .stat-value {
+        font-size: 28px;
+        font-weight: 800;
+        color: #071127;
+        line-height: 1;
+      }
+      .stat-sub {
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      /* ── Section heading ── */
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 14px;
+        flex-wrap: wrap;
+      }
+      .section-title {
+        font-size: 17px;
+        font-weight: 800;
+        color: #071127;
+      }
+
+      /* ── Table ── */
+      .table-wrap {
+        overflow-x: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+      thead th {
+        padding: 11px 14px;
+        background: #f8fafc;
+        font-weight: 700;
+        color: #374151;
+        text-align: left;
+        border-bottom: 2px solid var(--line);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      tbody td {
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--line);
+        color: #1e293b;
+        vertical-align: middle;
+      }
+      tbody tr:hover {
+        background: #f8fafc;
+      }
+      tbody tr:last-child td {
+        border-bottom: 0;
+      }
+      .td-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      /* ── User card row ── */
+      .user-row-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .u-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 11px;
+        display: grid;
+        place-items: center;
+        font-weight: 800;
+        font-size: 14px;
+        color: #fff;
+        flex: none;
+      }
+
+      /* ── Post card ── */
+      .post-list {
+        display: grid;
+        gap: 12px;
+      }
+      .post-card {
+        padding: 18px;
+      }
+      .post-card__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 10px;
+      }
+      .post-author {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .post-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 13px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-700));
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-weight: 800;
+        font-size: 16px;
+        flex: none;
+      }
+      .post-name {
+        font-weight: 800;
+        color: #071127;
+        font-size: 15px;
+      }
+      .post-meta {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+      .post-content {
+        font-size: 14px;
+        color: #334155;
+        line-height: 1.7;
+        border-left: 3px solid var(--line);
+        padding-left: 12px;
+        margin-bottom: 12px;
+      }
+      .post-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      /* ── Tabs ── */
+      .tabs {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+      }
+      .tab {
+        background: transparent;
+        border: 1px solid var(--line);
+        color: #0f172a;
+        border-radius: 999px;
+        padding: 8px 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.18s;
+        font-size: 13px;
+      }
+      .tab.active {
+        background: #ef4444;
+        border-color: #ef4444;
+        color: #fff;
+        box-shadow: 0 6px 16px rgba(239, 68, 68, 0.25);
+      }
+
+      /* ── Charts ── */
+      .chart-bar-area {
+        padding: 20px;
+      }
+      .chart-title {
+        font-size: 15px;
+        font-weight: 800;
+        margin-bottom: 16px;
+      }
+      .chart-bars {
+        display: flex;
+        align-items: flex-end;
+        gap: 10px;
+        height: 150px;
+      }
+      .bar-wrap {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+      }
+      .bar {
+        width: 100%;
+        border-radius: 7px 7px 0 0;
+        background: linear-gradient(180deg, #ef4444, #b91c1c);
+        transition: height 0.4s ease;
+        min-width: 24px;
+      }
+      .bar.green {
+        background: linear-gradient(180deg, var(--accent), var(--accent-700));
+      }
+      .bar-label {
+        font-size: 11px;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      .bar-val {
+        font-size: 11px;
+        font-weight: 700;
+        color: #dc2626;
+      }
+      .bar-val.green {
+        color: var(--accent-700);
+      }
+
+      /* ── Modal ── */
+      .overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        z-index: 200;
+        display: none;
+        place-items: center;
+        padding: 20px;
+      }
+      .overlay.open {
+        display: grid;
+      }
+      .modal {
+        background: #fff;
+        border-radius: 20px;
+        width: min(520px, 100%);
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
+        overflow: hidden;
+      }
+      .modal-header {
+        padding: 18px 22px;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .modal-title {
+        font-size: 17px;
+        font-weight: 800;
+      }
+      .modal-close {
+        background: var(--bg);
+        border: 0;
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 15px;
+        color: var(--muted);
+      }
+      .modal-body {
+        padding: 22px;
+        display: grid;
+        gap: 14px;
+      }
+      .modal-footer {
+        padding: 14px 22px;
+        border-top: 1px solid var(--line);
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+      }
+      .form-label {
+        font-size: 13px;
+        font-weight: 700;
+        color: #374151;
+        margin-bottom: 5px;
+        display: block;
+      }
+
+      /* ── Search ── */
+      .search-bar {
+        position: relative;
+      }
+      .search-bar i {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--muted);
+      }
+      .search-bar input {
+        padding-left: 36px;
+      }
+
+      /* ── Empty ── */
+      .empty {
+        text-align: center;
+        padding: 40px 20px;
+        color: var(--muted);
+      }
+      .empty i {
+        font-size: 40px;
+        margin-bottom: 12px;
+        display: block;
+        opacity: 0.25;
+      }
+
+      /* ── Responsive ── */
+      .hamburger {
+        display: none;
+        background: transparent;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 8px 12px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      @media (max-width: 1024px) {
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 768px) {
+        .sidebar {
+          position: fixed;
+          inset: 0 auto 0 0;
+          z-index: 300;
+          transform: translateX(-100%);
+        }
+        .sidebar.open {
+          transform: translateX(0);
+        }
+        .hamburger {
+          display: block;
+        }
+        .stats-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      @media (max-width: 480px) {
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-mark"><i class="fa-solid fa-shield-halved"></i></div>
+        <div class="brand-text">
+          <span>IE108</span>
+          <small>Admin Panel</small>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Tổng quan</div>
+        <button class="nav-item active" data-tab="dashboard">
+          <i class="fa-solid fa-gauge-high"></i> Dashboard
+        </button>
+
+        <div class="nav-section-label">Kiểm duyệt</div>
+        <button class="nav-item" data-tab="users">
+          <i class="fa-solid fa-users"></i> Quản lý người dùng
+          <span class="badge-count">2</span>
+        </button>
+        <button class="nav-item" data-tab="posts">
+          <i class="fa-solid fa-newspaper"></i> Bài đăng bảng tin
+          <span class="badge-count">5</span>
+        </button>
+        <button class="nav-item" data-tab="fields-admin">
+          <i class="fa-solid fa-futbol"></i> Duyệt sân mới
+          <span class="badge-count">1</span>
+        </button>
+
+        <div class="nav-section-label">Thống kê</div>
+        <button class="nav-item" data-tab="stats">
+          <i class="fa-solid fa-chart-bar"></i> Thống kê hệ thống
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="user-avatar">
+            <i class="fa-solid fa-user-shield" style="font-size: 14px"></i>
+          </div>
+          <div class="user-info">
+            <span>Admin hệ thống</span>
+            <small>Quản trị viên</small>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main">
+      <div class="topbar">
+        <div style="display: flex; align-items: center; gap: 12px">
+          <button class="hamburger" id="hamburger">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div class="topbar-title" id="topbar-title">Dashboard</div>
+        </div>
+        <div class="topbar-right">
+          <button class="topbar-btn" title="Thông báo">
+            <i class="fa-solid fa-bell"></i>
+          </button>
+          <button class="topbar-btn" title="Cài đặt">
+            <i class="fa-solid fa-gear"></i>
+          </button>
+          <a href="index.html" class="btn btn-outline" style="font-size: 13px">
+            <i
+              class="fa-solid fa-arrow-right-from-bracket"
+              style="margin-right: 5px"
+            ></i
+            >Đăng xuất
+          </a>
+        </div>
+      </div>
+
+      <div class="content">
+        <!-- ═══ TAB: DASHBOARD ═══ -->
+        <div id="tab-dashboard">
+          <div class="stats-grid">
+            <div class="card stat-card">
+              <div class="stat-icon blue">
+                <i class="fa-solid fa-users"></i>
+              </div>
+              <div class="stat-label">Tổng người dùng</div>
+              <div class="stat-value">1,284</div>
+              <div
+                class="stat-sub"
+                style="color: var(--accent-700); font-weight: 700"
+              >
+                <i class="fa-solid fa-arrow-up"></i> +38 tuần này
+              </div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-icon green">
+                <i class="fa-solid fa-futbol"></i>
+              </div>
+              <div class="stat-label">Tổng sân đăng ký</div>
+              <div class="stat-value">96</div>
+              <div
+                class="stat-sub"
+                style="color: var(--accent-700); font-weight: 700"
+              >
+                <i class="fa-solid fa-arrow-up"></i> +4 sân mới
+              </div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-icon purple">
+                <i class="fa-solid fa-handshake"></i>
+              </div>
+              <div class="stat-label">Trận ghép thành công</div>
+              <div class="stat-value">432</div>
+              <div class="stat-sub">tổng từ trước đến nay</div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-icon orange">
+                <i class="fa-solid fa-money-bill-trend-up"></i>
+              </div>
+              <div class="stat-label">Tổng giao dịch</div>
+              <div class="stat-value">2,140</div>
+              <div class="stat-sub">lượt đặt sân</div>
+            </div>
+          </div>
+
+          <!-- Charts -->
+          <div
+            style="
+              display: grid;
+              grid-template-columns: 3fr 2fr;
+              gap: 16px;
+              margin-bottom: 20px;
+            "
+          >
+            <div class="card chart-bar-area">
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  margin-bottom: 14px;
+                "
+              >
+                <div class="chart-title" style="margin: 0">
+                  Người dùng đăng ký mới (7 ngày)
+                </div>
+                <span class="badge info">+38 tuần này</span>
+              </div>
+              <div class="chart-bars" id="user-chart"></div>
+              <div
+                id="user-chart-labels"
+                style="display: flex; gap: 10px; margin-top: 6px"
+              ></div>
+            </div>
+
+            <div class="card" style="padding: 18px">
+              <div class="chart-title">Phân bổ người dùng</div>
+              <div
+                style="display: grid; gap: 10px; margin-top: 10px"
+                id="user-dist"
+              ></div>
+            </div>
+          </div>
+
+          <!-- Recent alerts -->
+          <div class="section-header">
+            <div class="section-title">Cần xử lý gấp</div>
+          </div>
+          <div style="display: grid; gap: 10px" id="alerts-list"></div>
+        </div>
+
+        <!-- ═══ TAB: USERS ═══ -->
+        <div id="tab-users" style="display: none">
+          <div class="section-header">
+            <div>
+              <div class="section-title">Quản lý người dùng</div>
+              <div
+                style="font-size: 13px; color: var(--muted); margin-top: 3px"
+              >
+                Xem chi tiết, khóa hoặc mở khóa tài khoản
+              </div>
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap">
+              <div class="search-bar" style="min-width: 220px">
+                <i class="fa-solid fa-search"></i>
+                <input
+                  class="input"
+                  placeholder="Tìm tên, email..."
+                  id="user-search"
+                />
+              </div>
+              <select
+                class="select"
+                style="width: auto; padding: 9px 13px; font-size: 13px"
+                id="user-role-filter"
+              >
+                <option value="all">Tất cả vai trò</option>
+                <option value="player">Player</option>
+                <option value="owner">Owner</option>
+              </select>
+              <select
+                class="select"
+                style="width: auto; padding: 9px 13px; font-size: 13px"
+                id="user-status-filter"
+              >
+                <option value="all">Tất cả trạng thái</option>
+                <option value="active">Đang hoạt động</option>
+                <option value="banned">Bị khóa</option>
+              </select>
+            </div>
+          </div>
+          <div class="card">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Người dùng</th>
+                    <th>Vai trò</th>
+                    <th>Ngày tham gia</th>
+                    <th>Lượt đặt</th>
+                    <th>Trạng thái</th>
+                    <th>Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody id="users-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ TAB: POSTS ═══ -->
+        <div id="tab-posts" style="display: none">
+          <div class="section-header">
+            <div>
+              <div class="section-title">Kiểm duyệt bài đăng bảng tin</div>
+              <div
+                style="font-size: 13px; color: var(--muted); margin-top: 3px"
+              >
+                Xem và xóa bài đăng vi phạm tiêu chuẩn cộng đồng
+              </div>
+            </div>
+            <div class="search-bar" style="min-width: 240px">
+              <i class="fa-solid fa-search"></i>
+              <input
+                class="input"
+                placeholder="Tìm bài đăng..."
+                id="post-search"
+              />
+            </div>
+          </div>
+          <div class="tabs" id="post-tabs">
+            <button class="tab active" data-filter="all">Tất cả</button>
+            <button class="tab" data-filter="flagged">
+              Bị báo cáo
+              <span
+                class="badge-count"
+                style="
+                  background: #ef4444;
+                  color: #fff;
+                  border-radius: 999px;
+                  padding: 1px 6px;
+                  font-size: 11px;
+                  margin-left: 4px;
+                "
+                >3</span
+              >
+            </button>
+            <button class="tab" data-filter="open">Đang mở</button>
+            <button class="tab" data-filter="matched">Đã ghép</button>
+          </div>
+          <div class="post-list" id="posts-list"></div>
+        </div>
+
+        <!-- ═══ TAB: FIELDS ADMIN ═══ -->
+        <div id="tab-fields-admin" style="display: none">
+          <div class="section-header">
+            <div>
+              <div class="section-title">Duyệt sân mới</div>
+              <div
+                style="font-size: 13px; color: var(--muted); margin-top: 3px"
+              >
+                Xem xét và phê duyệt sân do chủ sân đăng ký
+              </div>
+            </div>
+            <span class="badge warning"
+              ><i class="fa-solid fa-clock" style="margin-right: 5px"></i>1 sân
+              chờ duyệt</span
+            >
+          </div>
+          <div style="display: grid; gap: 14px" id="pending-fields"></div>
+
+          <div style="margin-top: 24px">
+            <div class="section-header">
+              <div class="section-title">Tất cả sân đang hoạt động</div>
+            </div>
+            <div class="card">
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Sân</th>
+                      <th>Chủ sân</th>
+                      <th>Khu vực</th>
+                      <th>Loại</th>
+                      <th>Trạng thái</th>
+                      <th>Thao tác</th>
+                    </tr>
+                  </thead>
+                  <tbody id="all-fields-body"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ TAB: STATS ═══ -->
+        <div id="tab-stats" style="display: none">
+          <div class="section-header">
+            <div class="section-title">Thống kê hệ thống</div>
+            <div style="display: flex; gap: 10px">
+              <select
+                class="select"
+                style="width: auto; padding: 9px 13px; font-size: 13px"
+                id="stats-filter"
+              >
+                <option value="week">7 ngày</option>
+                <option value="month">30 ngày</option>
+                <option value="year">Năm nay</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="stats-grid" style="margin-bottom: 20px">
+            <div class="card stat-card">
+              <div class="stat-label">Người dùng mới</div>
+              <div class="stat-value" style="font-size: 24px">38</div>
+              <div
+                class="stat-sub"
+                style="color: var(--accent-700); font-weight: 700"
+              >
+                +15% so với kỳ trước
+              </div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-label">Lượt đặt sân</div>
+              <div class="stat-value" style="font-size: 24px">284</div>
+              <div
+                class="stat-sub"
+                style="color: var(--accent-700); font-weight: 700"
+              >
+                +8% so với kỳ trước
+              </div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-label">Trận ghép thành công</div>
+              <div class="stat-value" style="font-size: 24px">47</div>
+              <div
+                class="stat-sub"
+                style="color: var(--accent-700); font-weight: 700"
+              >
+                +21% so với kỳ trước
+              </div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-label">Bài đăng bị xóa</div>
+              <div class="stat-value" style="font-size: 24px">5</div>
+              <div class="stat-sub" style="color: #dc2626; font-weight: 700">
+                vi phạm cộng đồng
+              </div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px">
+            <div class="card chart-bar-area">
+              <div class="chart-title">Lượt đặt sân theo ngày</div>
+              <div class="chart-bars" id="booking-chart"></div>
+              <div
+                id="booking-labels"
+                style="display: flex; gap: 10px; margin-top: 6px"
+              ></div>
+            </div>
+            <div class="card chart-bar-area">
+              <div class="chart-title">Người dùng đăng ký theo ngày</div>
+              <div class="chart-bars" id="reg-chart"></div>
+              <div
+                id="reg-labels"
+                style="display: flex; gap: 10px; margin-top: 6px"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BAN MODAL -->
+    <div class="overlay" id="ban-overlay">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title">Khóa tài khoản</div>
+          <button class="modal-close" onclick="closeBanModal()">✕</button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <label class="form-label">Người dùng bị khóa</label>
+            <input class="input" id="ban-user-name" readonly />
+          </div>
+          <div>
+            <label class="form-label">Lý do khóa *</label>
+            <select class="select" id="ban-reason-select">
+              <option value="">-- Chọn lý do --</option>
+              <option>Vi phạm tiêu chuẩn cộng đồng</option>
+              <option>Spam hoặc quảng cáo</option>
+              <option>Lừa đảo</option>
+              <option>Ngôn từ không phù hợp</option>
+              <option>Khác</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label">Ghi chú thêm</label>
+            <textarea
+              class="textarea"
+              rows="3"
+              id="ban-note"
+              placeholder="Mô tả vi phạm cụ thể..."
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" onclick="closeBanModal()">Hủy</button>
+          <button class="btn btn-red" onclick="confirmBan()">
+            <i class="fa-solid fa-lock" style="margin-right: 5px"></i>Khóa tài
+            khoản
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DELETE POST MODAL -->
+    <div class="overlay" id="del-post-overlay">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title">Xóa bài đăng</div>
+          <button class="modal-close" onclick="closeDelPost()">✕</button>
+        </div>
+        <div class="modal-body">
+          <div
+            style="
+              background: #fef2f2;
+              border-radius: 12px;
+              padding: 14px;
+              display: flex;
+              gap: 12px;
+              align-items: flex-start;
+            "
+          >
+            <i
+              class="fa-solid fa-triangle-exclamation"
+              style="color: #ef4444; font-size: 18px; margin-top: 2px"
+            ></i>
+            <div>
+              <div style="font-weight: 700; color: #991b1b; margin-bottom: 4px">
+                Xác nhận xóa bài đăng
+              </div>
+              <div style="font-size: 13px; color: #7f1d1d">
+                Hành động này không thể hoàn tác. Người đăng sẽ nhận được thông
+                báo kèm lý do.
+              </div>
+            </div>
+          </div>
+          <div>
+            <label class="form-label">Lý do xóa *</label>
+            <select class="select" id="del-reason">
+              <option value="">-- Chọn lý do --</option>
+              <option>Nội dung spam/quảng cáo</option>
+              <option>Ngôn từ thô tục, xúc phạm</option>
+              <option>Thông tin sai lệch/lừa đảo</option>
+              <option>Vi phạm tiêu chuẩn cộng đồng</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" onclick="closeDelPost()">Hủy</button>
+          <button class="btn btn-red" onclick="confirmDelPost()">
+            <i class="fa-solid fa-trash" style="margin-right: 5px"></i>Xóa bài
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        const qs = (s) => document.querySelector(s);
+        const qsa = (s) => Array.from(document.querySelectorAll(s));
+
+        // ── Toast ──
+        function toast(msg, type = "success") {
+          const t = document.createElement("div");
+          t.style.cssText = `position:fixed;right:18px;bottom:18px;z-index:9999;padding:13px 18px;border-radius:12px;background:#fff;box-shadow:0 10px 30px rgba(0,0,0,.12);border-left:4px solid ${
+            type === "success"
+              ? "#22C55E"
+              : type === "error"
+              ? "#EF4444"
+              : "#F59E0B"
+          };font-weight:600;font-size:14px;max-width:320px`;
+          t.textContent = msg;
+          document.body.appendChild(t);
+          setTimeout(() => t.remove(), 2800);
+        }
+
+        // ── Data ──
+        let users = [
+          {
+            id: 1,
+            name: "Nguyễn Trọng Bình",
+            email: "binh@email.com",
+            role: "player",
+            joined: "10/03/2025",
+            bookings: 12,
+            status: "active",
+            color: "#3b82f6",
+          },
+          {
+            id: 2,
+            name: "Lê Thành Công",
+            email: "cong.le@email.com",
+            role: "owner",
+            joined: "05/01/2025",
+            bookings: 0,
+            status: "active",
+            color: "#8b5cf6",
+          },
+          {
+            id: 3,
+            name: "Trần Minh Khoa",
+            email: "khoa.tran@email.com",
+            role: "player",
+            joined: "22/04/2025",
+            bookings: 3,
+            status: "banned",
+            color: "#ef4444",
+          },
+          {
+            id: 4,
+            name: "Phạm Hữu Đức",
+            email: "duc.pham@email.com",
+            role: "player",
+            joined: "14/02/2025",
+            bookings: 7,
+            status: "active",
+            color: "#f59e0b",
+          },
+          {
+            id: 5,
+            name: "Hoàng Văn Nam",
+            email: "nam.hoang@email.com",
+            role: "owner",
+            joined: "01/05/2025",
+            bookings: 0,
+            status: "active",
+            color: "#10b981",
+          },
+          {
+            id: 6,
+            name: "Vũ Quốc Hùng",
+            email: "hung.vu@email.com",
+            role: "player",
+            joined: "18/03/2025",
+            bookings: 5,
+            status: "banned",
+            color: "#ec4899",
+          },
+        ];
+
+        let posts = [
+          {
+            id: 1,
+            author: "Nguyễn Trọng Bình",
+            team: "Team Rồng Xanh",
+            level: "Trung bình",
+            content:
+              "Cần tuyển thêm 3 cầu thủ đá kèo 5v5 tại SVĐ Hoàng Mai. Ưu tiên người chạy cánh nhanh, kỷ luật tốt.",
+            time: "19:00 hôm nay",
+            status: "open",
+            flagged: false,
+          },
+          {
+            id: 2,
+            author: "Lê Thành Công",
+            team: "Team Phong Trào",
+            level: "Mới bắt đầu",
+            content:
+              "Ghép trận vui vẻ thôi nhé, fair-play là trên hết! Cần thêm 5 người. Chi phí chia đều.",
+            time: "18:30 thứ 7",
+            status: "open",
+            flagged: false,
+          },
+          {
+            id: 3,
+            author: "Trần Minh Khoa",
+            team: "Khoa FC",
+            level: "Cao thủ",
+            content:
+              "MUA BÁN GIÀY BÓNG ĐÁ CHÍNH HÃNG!!! LH 0912345678 giá tốt nhất thị trường click link bio!!!",
+            time: "15:00 hôm qua",
+            status: "open",
+            flagged: true,
+          },
+          {
+            id: 4,
+            author: "Phạm Hữu Đức",
+            team: "Đội U25 Hà Nội",
+            level: "Trung bình",
+            content:
+              "Tìm đối thủ giao hữu cuối tuần. Sân A tại Cầu Giấy. Có kinh nghiệm thi đấu phong trào.",
+            time: "20:00 CN",
+            status: "matched",
+            flagged: false,
+          },
+          {
+            id: 5,
+            author: "Vũ Quốc Hùng",
+            team: "Hùng BT",
+            level: "Mới bắt đầu",
+            content:
+              "Bán vé fake, ai tin thì bị lừa đấy 😂😂😂 chia sẻ để mọi người cảnh giác nhé!!!",
+            time: "10:00 hôm qua",
+            status: "open",
+            flagged: true,
+          },
+        ];
+
+        const pendingFields = [
+          {
+            id: 10,
+            name: "Sân Thủ Đức Premium",
+            owner: "Nguyễn Hoàng Long",
+            area: "TP.HCM",
+            type: "5v5",
+            price: 250000,
+            submitted: "14/05/2025",
+            img: "https://images.unsplash.com/photo-1508098682722-e99c643e7f0b?w=80&q=60",
+          },
+        ];
+
+        const allFields = [
+          {
+            id: 1,
+            name: "SVĐ Hoàng Mai",
+            owner: "Lê Thành Công",
+            area: "Hà Nội",
+            type: "5v5",
+            status: "active",
+          },
+          {
+            id: 2,
+            name: "Trung tâm A",
+            owner: "Lê Thành Công",
+            area: "Hà Nội",
+            type: "7v7",
+            status: "active",
+          },
+          {
+            id: 3,
+            name: "Sân Bình Thạnh",
+            owner: "Hoàng Văn Nam",
+            area: "TP.HCM",
+            type: "5v5",
+            status: "active",
+          },
+          {
+            id: 4,
+            name: "Sân Quận 9",
+            owner: "Hoàng Văn Nam",
+            area: "TP.HCM",
+            type: "11v11",
+            status: "active",
+          },
+        ];
+
+        const userChartData = [
+          { day: "T2", val: 4 },
+          { day: "T3", val: 7 },
+          { day: "T4", val: 5 },
+          { day: "T5", val: 9 },
+          { day: "T6", val: 6 },
+          { day: "T7", val: 12 },
+          { day: "CN", val: 8 },
+        ];
+        const bookingChartData = [
+          { day: "T2", val: 32 },
+          { day: "T3", val: 41 },
+          { day: "T4", val: 37 },
+          { day: "T5", val: 55 },
+          { day: "T6", val: 48 },
+          { day: "T7", val: 72 },
+          { day: "CN", val: 61 },
+        ];
+        const regChartData = [
+          { day: "T2", val: 3 },
+          { day: "T3", val: 8 },
+          { day: "T4", val: 4 },
+          { day: "T5", val: 11 },
+          { day: "T6", val: 6 },
+          { day: "T7", val: 14 },
+          { day: "CN", val: 9 },
+        ];
+
+        let banTargetId = null;
+        let delPostId = null;
+        let postFilter = "all";
+        let postSearch = "";
+
+        // ── Tab switching ──
+        const titles = {
+          dashboard: "Dashboard",
+          users: "Quản lý người dùng",
+          posts: "Bài đăng bảng tin",
+          "fields-admin": "Duyệt sân mới",
+          stats: "Thống kê hệ thống",
+        };
+        function switchTab(name) {
+          qsa('[id^="tab-"]').forEach((el) => (el.style.display = "none"));
+          qs(`#tab-${name}`)?.style.setProperty("display", "block");
+          qsa(".nav-item").forEach((el) => el.classList.remove("active"));
+          qs(`.nav-item[data-tab="${name}"]`)?.classList.add("active");
+          qs("#topbar-title").textContent = titles[name] || name;
+        }
+        qsa(".nav-item[data-tab]").forEach((btn) => {
+          btn.addEventListener("click", () => switchTab(btn.dataset.tab));
+        });
+
+        // ── Mobile sidebar ──
+        const sidebar = qs("#sidebar");
+        qs("#hamburger").addEventListener("click", () =>
+          sidebar.classList.toggle("open")
+        );
+        document.addEventListener("click", (e) => {
+          if (
+            window.innerWidth <= 768 &&
+            !sidebar.contains(e.target) &&
+            e.target !== qs("#hamburger")
+          )
+            sidebar.classList.remove("open");
+        });
+
+        // ── Render users ──
+        function renderUsers() {
+          const search = (qs("#user-search")?.value || "").toLowerCase();
+          const roleF = qs("#user-role-filter")?.value || "all";
+          const statusF = qs("#user-status-filter")?.value || "all";
+          let list = users;
+          if (search)
+            list = list.filter(
+              (u) =>
+                u.name.toLowerCase().includes(search) ||
+                u.email.toLowerCase().includes(search)
+            );
+          if (roleF !== "all") list = list.filter((u) => u.role === roleF);
+          if (statusF !== "all")
+            list = list.filter((u) => u.status === statusF);
+
+          const roleLabel = {
+            player: '<span class="badge info">Player</span>',
+            owner: '<span class="badge neutral">Owner</span>',
+          };
+          qs("#users-body").innerHTML = list.length
+            ? list
+                .map(
+                  (u) => `
+      <tr>
+        <td><div class="user-row-info">
+          <div class="u-avatar" style="background:${u.color}">${u.name[0]}</div>
+          <div>
+            <div style="font-weight:700;color:#071127">${u.name}</div>
+            <div style="font-size:12px;color:var(--muted)">${u.email}</div>
+          </div>
+        </div></td>
+        <td>${roleLabel[u.role] || u.role}</td>
+        <td style="color:var(--muted);font-size:13px">${u.joined}</td>
+        <td style="font-weight:700">${u.bookings}</td>
+        <td>${
+          u.status === "active"
+            ? '<span class="badge">Hoạt động</span>'
+            : '<span class="badge danger">Bị khóa</span>'
+        }</td>
+        <td><div class="td-actions">
+          ${
+            u.status === "active"
+              ? `<button class="btn btn-danger" style="padding:7px 12px;font-size:12px" onclick="openBanModal(${u.id})"><i class="fa-solid fa-lock" style="margin-right:4px"></i>Khóa</button>`
+              : `<button class="btn btn-soft" style="padding:7px 12px;font-size:12px" onclick="unbanUser(${u.id})"><i class="fa-solid fa-lock-open" style="margin-right:4px"></i>Mở khóa</button>`
+          }
+          <button class="btn btn-outline" style="padding:7px 12px;font-size:12px" onclick="viewUser(${
+            u.id
+          })"><i class="fa-solid fa-eye"></i></button>
+        </div></td>
+      </tr>
+    `
+                )
+                .join("")
+            : '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--muted)">Không tìm thấy người dùng nào</td></tr>';
+        }
+
+        qs("#user-search")?.addEventListener("input", renderUsers);
+        qs("#user-role-filter")?.addEventListener("change", renderUsers);
+        qs("#user-status-filter")?.addEventListener("change", renderUsers);
+
+        // ── Render posts ──
+        function renderPosts() {
+          const search = (qs("#post-search")?.value || "").toLowerCase();
+          let list = posts;
+          if (postFilter === "flagged") list = list.filter((p) => p.flagged);
+          else if (postFilter !== "all")
+            list = list.filter((p) => p.status === postFilter);
+          if (search)
+            list = list.filter(
+              (p) =>
+                p.author.toLowerCase().includes(search) ||
+                p.content.toLowerCase().includes(search)
+            );
+
+          qs("#posts-list").innerHTML = list.length
+            ? list
+                .map(
+                  (p) => `
+      <div class="card post-card" id="post-${p.id}">
+        <div class="post-card__header">
+          <div class="post-author">
+            <div class="post-avatar">${p.author[0]}</div>
+            <div>
+              <div class="post-name">${
+                p.author
+              } <span style="font-size:13px;color:var(--muted);font-weight:500">· ${
+                    p.team
+                  }</span></div>
+              <div class="post-meta">Trình độ: ${p.level} &nbsp;·&nbsp; ${
+                    p.time
+                  }</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            ${
+              p.flagged
+                ? '<span class="badge danger"><i class="fa-solid fa-flag" style="margin-right:4px"></i>Bị báo cáo</span>'
+                : ""
+            }
+            ${
+              p.status === "matched"
+                ? '<span class="badge">Đã ghép</span>'
+                : '<span class="badge info">Đang mở</span>'
+            }
+          </div>
+        </div>
+        <div class="post-content">${p.content}</div>
+        <div class="post-actions">
+          <button class="btn btn-danger" style="padding:8px 14px;font-size:12px" onclick="openDelPost(${
+            p.id
+          })"><i class="fa-solid fa-trash" style="margin-right:5px"></i>Xóa bài</button>
+          <button class="btn btn-outline" style="padding:8px 14px;font-size:12px"><i class="fa-solid fa-user" style="margin-right:5px"></i>Xem hồ sơ tác giả</button>
+          ${
+            p.flagged
+              ? `<button class="btn btn-soft" style="padding:8px 14px;font-size:12px" onclick="dismissFlag(${p.id})"><i class="fa-solid fa-check" style="margin-right:5px"></i>Bỏ qua báo cáo</button>`
+              : ""
+          }
+        </div>
+      </div>
+    `
+                )
+                .join("")
+            : '<div class="empty"><i class="fa-solid fa-newspaper"></i><div>Không có bài đăng nào</div></div>';
+        }
+
+        qs("#post-search")?.addEventListener("input", renderPosts);
+        qsa("#post-tabs .tab").forEach((tab) => {
+          tab.addEventListener("click", () => {
+            qsa("#post-tabs .tab").forEach((t) => t.classList.remove("active"));
+            tab.classList.add("active");
+            postFilter = tab.dataset.filter;
+            renderPosts();
+          });
+        });
+
+        // ── Render pending fields ──
+        function renderPendingFields() {
+          qs("#pending-fields").innerHTML =
+            pendingFields
+              .map(
+                (f) => `
+      <div class="card" style="padding:20px;display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap">
+        <img src="${
+          f.img
+        }" style="width:80px;height:80px;border-radius:12px;object-fit:cover;background:#e2e8f0" alt="">
+        <div style="flex:1;min-width:200px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+            <span style="font-size:17px;font-weight:800;color:#071127">${
+              f.name
+            }</span>
+            <span class="badge warning">Chờ duyệt</span>
+          </div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.8">
+            <span><i class="fa-solid fa-user" style="width:16px"></i> Chủ sân: <strong>${
+              f.owner
+            }</strong></span><br>
+            <span><i class="fa-solid fa-map-marker-alt" style="width:16px"></i> Khu vực: ${
+              f.area
+            }</span> &nbsp;·&nbsp;
+            <span><i class="fa-solid fa-futbol" style="width:16px"></i> ${
+              f.type
+            }</span> &nbsp;·&nbsp;
+            <span><i class="fa-solid fa-money-bill" style="width:16px"></i> ${f.price.toLocaleString(
+              "vi-VN"
+            )}₫/giờ</span><br>
+            <span><i class="fa-solid fa-clock" style="width:16px"></i> Gửi ngày: ${
+              f.submitted
+            }</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-self:center">
+          <button class="btn btn-primary" onclick="approveField(${
+            f.id
+          })"><i class="fa-solid fa-check" style="margin-right:5px"></i>Phê duyệt</button>
+          <button class="btn btn-danger" onclick="rejectField(${
+            f.id
+          })"><i class="fa-solid fa-xmark" style="margin-right:5px"></i>Từ chối</button>
+        </div>
+      </div>
+    `
+              )
+              .join("") ||
+            '<div class="empty"><i class="fa-solid fa-check-circle"></i><div>Không có sân nào chờ duyệt</div></div>';
+        }
+
+        function renderAllFields() {
+          const statusBadge = (s) =>
+            s === "active"
+              ? '<span class="badge">Hoạt động</span>'
+              : '<span class="badge danger">Tạm dừng</span>';
+          qs("#all-fields-body").innerHTML = allFields
+            .map(
+              (f) => `
+      <tr>
+        <td style="font-weight:700">${f.name}</td>
+        <td style="color:var(--muted)">${f.owner}</td>
+        <td style="color:var(--muted)">${f.area}</td>
+        <td><span class="badge neutral">${f.type}</span></td>
+        <td>${statusBadge(f.status)}</td>
+        <td><button class="btn btn-danger" style="padding:6px 12px;font-size:12px" onclick="suspendField(${
+          f.id
+        })"><i class="fa-solid fa-ban" style="margin-right:4px"></i>Tạm dừng</button></td>
+      </tr>
+    `
+            )
+            .join("");
+        }
+
+        // ── Render alerts (dashboard) ──
+        function renderAlerts() {
+          const alerts = [
+            {
+              icon: "fa-flag",
+              color: "#ef4444",
+              bg: "#FEF2F2",
+              title: "3 bài đăng bị báo cáo vi phạm",
+              sub: "Cần kiểm tra và xử lý ngay",
+              action: "Xem bài đăng",
+              tab: "posts",
+            },
+            {
+              icon: "fa-user-slash",
+              color: "#f59e0b",
+              bg: "#FFFBEB",
+              title: "2 tài khoản có hoạt động bất thường",
+              sub: "Đã đăng nhiều bài đăng spam liên tiếp",
+              action: "Xem người dùng",
+              tab: "users",
+            },
+            {
+              icon: "fa-futbol",
+              color: "#3b82f6",
+              bg: "#EFF6FF",
+              title: "1 sân mới chờ phê duyệt",
+              sub: "Sân Thủ Đức Premium — Nguyễn Hoàng Long",
+              action: "Duyệt sân",
+              tab: "fields-admin",
+            },
+          ];
+          qs("#alerts-list").innerHTML = alerts
+            .map(
+              (a) => `
+      <div class="card" style="padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:box-shadow .18s" onclick="switchTab('${a.tab}')" onmouseenter="this.style.boxShadow='0 12px 28px rgba(0,0,0,.1)'" onmouseleave="this.style.boxShadow=''">
+        <div style="width:44px;height:44px;border-radius:13px;background:${a.bg};display:grid;place-items:center;flex:none">
+          <i class="fa-solid ${a.icon}" style="color:${a.color};font-size:18px"></i>
+        </div>
+        <div style="flex:1">
+          <div style="font-weight:700;color:#071127">${a.title}</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:2px">${a.sub}</div>
+        </div>
+        <button class="btn btn-outline" style="padding:7px 14px;font-size:12px;flex:none">${a.action}</button>
+      </div>
+    `
+            )
+            .join("");
+        }
+
+        // ── Render user distribution ──
+        function renderUserDist() {
+          const dist = [
+            { label: "Player", count: 1142, color: "#3b82f6", pct: 89 },
+            { label: "Owner", count: 142, color: "#8b5cf6", pct: 11 },
+          ];
+          qs("#user-dist").innerHTML = dist
+            .map(
+              (d) => `
+      <div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px">
+          <span style="font-weight:700;display:flex;align-items:center;gap:7px">
+            <span style="width:10px;height:10px;border-radius:50%;background:${
+              d.color
+            };display:inline-block"></span>${d.label}
+          </span>
+          <span style="font-weight:800">${d.count.toLocaleString()}</span>
+        </div>
+        <div style="background:#e5e7eb;border-radius:999px;height:7px">
+          <div style="background:${
+            d.color
+          };height:7px;border-radius:999px;width:${
+                d.pct
+              }%;transition:width .5s ease"></div>
+        </div>
+      </div>
+    `
+            )
+            .join("");
+        }
+
+        // ── Charts ──
+        function renderChart(containerId, labelId, data, colorClass = "") {
+          const maxVal = Math.max(...data.map((d) => d.val));
+          qs(containerId).innerHTML = data
+            .map(
+              (d) => `
+      <div class="bar-wrap">
+        <div class="bar-val ${colorClass}">${d.val}</div>
+        <div class="bar ${colorClass}" style="height:${Math.round(
+                (d.val / maxVal) * 120
+              )}px"></div>
+      </div>
+    `
+            )
+            .join("");
+          qs(labelId).innerHTML = data
+            .map(
+              (d) =>
+                `<div style="flex:1;text-align:center;font-size:11px;color:var(--muted);font-weight:600">${d.day}</div>`
+            )
+            .join("");
+        }
+
+        // ── Actions ──
+        window.openBanModal = (id) => {
+          const u = users.find((x) => x.id === id);
+          if (!u) return;
+          banTargetId = id;
+          qs("#ban-user-name").value = `${u.name} (${u.email})`;
+          qs("#ban-overlay").classList.add("open");
+        };
+        window.closeBanModal = () => {
+          qs("#ban-overlay").classList.remove("open");
+          banTargetId = null;
+        };
+        window.confirmBan = () => {
+          const reason = qs("#ban-reason-select").value;
+          if (!reason) {
+            toast("Vui lòng chọn lý do khóa", "error");
+            return;
+          }
+          const u = users.find((x) => x.id === banTargetId);
+          if (u) {
+            u.status = "banned";
+            renderUsers();
+            toast(`Đã khóa tài khoản ${u.name}`, "success");
+          }
+          window.closeBanModal();
+        };
+        window.unbanUser = (id) => {
+          const u = users.find((x) => x.id === id);
+          if (u) {
+            u.status = "active";
+            renderUsers();
+            toast(`Đã mở khóa tài khoản ${u.name}`);
+          }
+        };
+        window.viewUser = (id) => toast("Xem chi tiết người dùng #" + id);
+
+        window.openDelPost = (id) => {
+          delPostId = id;
+          qs("#del-post-overlay").classList.add("open");
+        };
+        window.closeDelPost = () => {
+          qs("#del-post-overlay").classList.remove("open");
+          delPostId = null;
+        };
+        window.confirmDelPost = () => {
+          const reason = qs("#del-reason").value;
+          if (!reason) {
+            toast("Vui lòng chọn lý do xóa", "error");
+            return;
+          }
+          posts = posts.filter((p) => p.id !== delPostId);
+          renderPosts();
+          toast("Đã xóa bài đăng thành công");
+          window.closeDelPost();
+        };
+        window.dismissFlag = (id) => {
+          const p = posts.find((x) => x.id === id);
+          if (p) {
+            p.flagged = false;
+            renderPosts();
+            toast("Đã bỏ qua báo cáo");
+          }
+        };
+
+        window.approveField = (id) => {
+          toast("Đã phê duyệt sân thành công!");
+          qs("#pending-fields").innerHTML =
+            '<div class="empty"><i class="fa-solid fa-circle-check"></i><div>Không có sân nào chờ duyệt</div></div>';
+        };
+        window.rejectField = (id) => {
+          if (confirm("Từ chối sân này?")) {
+            toast("Đã từ chối sân", "error");
+            qs("#pending-fields").innerHTML =
+              '<div class="empty"><i class="fa-solid fa-circle-check"></i><div>Không có sân nào chờ duyệt</div></div>';
+          }
+        };
+        window.suspendField = (id) => {
+          if (confirm("Tạm dừng hoạt động sân này?"))
+            toast("Đã tạm dừng sân #" + id, "error");
+        };
+        window.switchTab = switchTab;
+
+        // ── Click outside modal ──
+        qs("#ban-overlay").addEventListener("click", (e) => {
+          if (e.target === qs("#ban-overlay")) window.closeBanModal();
+        });
+        qs("#del-post-overlay").addEventListener("click", (e) => {
+          if (e.target === qs("#del-post-overlay")) window.closeDelPost();
+        });
+
+        // ── Init ──
+        renderUsers();
+        renderPosts();
+        renderPendingFields();
+        renderAllFields();
+        renderAlerts();
+        renderUserDist();
+        renderChart(
+          "#user-chart",
+          "#user-chart-labels",
+          userChartData,
+          "green"
+        );
+        renderChart(
+          "#booking-chart",
+          "#booking-labels",
+          bookingChartData,
+          "green"
+        );
+        renderChart("#reg-chart", "#reg-labels", regChartData, "");
+      })();
+    </script>
+
+    <script>
+      // ── Auth guard ──
+      (function () {
+        const user = JSON.parse(localStorage.getItem("ie108_user") || "null");
+        if (!user || !user.loggedIn || user.role !== "admin") {
+          window.location.replace("login.html");
+          return;
+        }
+        document.addEventListener("DOMContentLoaded", function () {
+          const nameEl = document.querySelector(".user-info span");
+          if (nameEl) nameEl.textContent = user.name;
+
+          document
+            .querySelectorAll('[href="index.html"]')
+            .forEach(function (btn) {
+              if (btn.textContent.includes("Đăng xuất")) {
+                btn.addEventListener("click", function (e) {
+                  e.preventDefault();
+                  if (confirm("Bạn có chắc muốn đăng xuất?")) {
+                    localStorage.removeItem("ie108_user");
+                    window.location.href = "login.html";
+                  }
+                });
+              }
+            });
+        });
+      })();
+    </script>
+  </body>
+</html>
