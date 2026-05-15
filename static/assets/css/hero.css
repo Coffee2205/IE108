@@ -1,6 +1,6 @@
 .hero-section{position:relative;padding:28px 0 14px}
 .hero-panel{position:relative;min-height:440px;border-radius:24px;overflow:hidden;box-shadow:var(--shadow);background:#0f172a}
-.hero-panel::before{content:'';position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1556817411-31ae72fa3ea0?auto=format&fit=crop&w=1400&q=60') center/cover no-repeat;filter:brightness(.42)}
+.hero-panel::before{content:'';position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1556817411-31ae72fa3ea0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=60') center/cover no-repeat;filter:brightness(.42)}
 .hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(15,23,42,.85),rgba(15,23,42,.52) 55%,rgba(34,197,94,.12))}
 .hero-content{position:relative;z-index:2;padding:42px 0 34px}
 .hero-grid{display:grid;grid-template-columns:1.3fr .95fr;gap:24px;align-items:center}

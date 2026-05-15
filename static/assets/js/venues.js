@@ -54,7 +54,7 @@
           <div class="gallery">
             <div class="gallery__main"><img src="${venue.img}" alt="${venue.name}"></div>
             <div class="gallery__thumb"><img src="${venue.img}" alt="${venue.name} 2"></div>
-            <div class="gallery__thumb"><img src="https://images.unsplash.com/photo-1551958219-acbc608c6377?auto=format&fit=crop&w=900&q=60" alt="Sân bóng"></div>
+            <div class="gallery__thumb"><img src="https://images.unsplash.com/photo-1551958219-acbc608c6377?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=60" alt="Sân bóng"></div>
           </div>
           <div class="card" style="margin-top:16px;padding:18px">
             <h3 class="section-title" style="font-size:22px;margin-bottom:8px">Thông tin sân</h3>

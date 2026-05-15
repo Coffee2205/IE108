@@ -39,7 +39,7 @@
       price: 200000,
       tags: ["Ánh sáng", "Cỏ nhân tạo", "Bãi xe"],
       status: "available",
-      img: "https://images.unsplash.com/photo-1517927033932-b3d18e5d7a9b?auto=format&fit=crop&w=1200&q=60",
+      img: "https://images.unsplash.com/photo-1517927033932-b3d18e5d7a9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=60",
     },
     {
       id: 2,
@@ -51,7 +51,7 @@
       price: 320000,
       tags: ["Sân lớn", "Tắm tráng", "Có mái che"],
       status: "hold",
-      img: "https://images.unsplash.com/photo-1521412644187-c49fa049e84d?auto=format&fit=crop&w=1200&q=60",
+      img: "https://images.unsplash.com/photo-1521412644187-c49fa049e84d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=60",
     },
     {
       id: 3,
@@ -63,7 +63,7 @@
       price: 180000,
       tags: ["Gần trung tâm", "Ánh sáng", "Nước uống"],
       status: "busy",
-      img: "https://images.unsplash.com/photo-1533743983669-94fa5e8a93f4?auto=format&fit=crop&w=1200&q=60",
+      img: "https://images.unsplash.com/photo-1533743983669-94fa5e8a93f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=60",
     },
   ];
 

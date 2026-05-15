@@ -21,9 +21,9 @@
   ]
 
   const venues = [
-    { id: 1, name: 'SVĐ Hoàng Mai', area: 'Hanoi', type: '5v5', addr: 'Hoàng Mai, Hà Nội', rating: 4.6, price: 200000, tags: ['Ánh sáng', 'Cỏ nhân tạo', 'Bãi xe'], status: 'available', img: 'https://images.unsplash.com/photo-1517927033932-b3d18e5d7a9b?auto=format&fit=crop&w=1200&q=60' },
-    { id: 2, name: 'Trung tâm A', area: 'Hanoi', type: '7v7', addr: 'Cầu Giấy, Hà Nội', rating: 4.3, price: 320000, tags: ['Sân lớn', 'Tắm tráng', 'Có mái che'], status: 'hold', img: 'https://images.unsplash.com/photo-1521412644187-c49fa049e84d?auto=format&fit=crop&w=1200&q=60' },
-    { id: 3, name: 'Sân Bình Thạnh', area: 'HCM', type: '5v5', addr: 'Bình Thạnh, Hồ Chí Minh', rating: 4.8, price: 180000, tags: ['Gần trung tâm', 'Ánh sáng', 'Nước uống'], status: 'busy', img: 'https://images.unsplash.com/photo-1533743983669-94fa5e8a93f4?auto=format&fit=crop&w=1200&q=60' }
+    { id: 1, name: 'SVĐ Hoàng Mai', area: 'Hanoi', type: '5v5', addr: 'Hoàng Mai, Hà Nội', rating: 4.6, price: 200000, tags: ['Ánh sáng', 'Cỏ nhân tạo', 'Bãi xe'], status: 'available', img: 'https://images.unsplash.com/photo-1517927033932-b3d18e5d7a9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=60' },
+    { id: 2, name: 'Trung tâm A', area: 'Hanoi', type: '7v7', addr: 'Cầu Giấy, Hà Nội', rating: 4.3, price: 320000, tags: ['Sân lớn', 'Tắm tráng', 'Có mái che'], status: 'hold', img: 'https://images.unsplash.com/photo-1521412644187-c49fa049e84d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=60' },
+    { id: 3, name: 'Sân Bình Thạnh', area: 'HCM', type: '5v5', addr: 'Bình Thạnh, Hồ Chí Minh', rating: 4.8, price: 180000, tags: ['Gần trung tâm', 'Ánh sáng', 'Nước uống'], status: 'busy', img: 'https://images.unsplash.com/photo-1533743983669-94fa5e8a93f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=60' }
   ]
 
   const bookings = [
@@ -131,7 +131,7 @@
           <div class="gallery">
             <div class="gallery__main"><img src="${venue.img}" alt="${venue.name}"></div>
             <div class="gallery__thumb"><img src="${venue.img}" alt="${venue.name} 2"></div>
-            <div class="gallery__thumb"><img src="https://images.unsplash.com/photo-1551958219-acbc608c6377?auto=format&fit=crop&w=900&q=60" alt="Sân bóng"></div>
+            <div class="gallery__thumb"><img src="https://images.unsplash.com/photo-1551958219-acbc608c6377?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=60" alt="Sân bóng"></div>
           </div>
           <div class="card" style="margin-top:16px;padding:18px">
             <h3 class="section-title" style="font-size:22px;margin-bottom:8px">Thông tin sân</h3>
